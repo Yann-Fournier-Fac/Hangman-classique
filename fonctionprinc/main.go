@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	for true {
+	for {
 		str := ""
 		fmt.Println("1 : Lancer une nouvelle partie")
 		fmt.Println("2 : Continuer la partie sauvegarder")
@@ -23,7 +23,7 @@ func main() {
 			fmt.Printf("\n")
 
 			Mot := ""
-			// Trouver le mot à deviner
+			// Determiner le mot a deviner le mot à deviner
 			if len(os.Args[1:]) == 0 {
 				fmt.Printf("File name missing\n")
 			} else if len(os.Args[1:]) > 1 {
@@ -49,19 +49,26 @@ func main() {
 				n := len(Mot)/2 - 1
 				tab := []int{}
 				boolean := false
-				for boolean == false {
+				for !boolean {
 					for i := 0; i < n; i++ {
 						rand.Seed(time.Now().UnixNano())
 						radomInt2 := rand.Intn(len(Mot))
 						tab = append(tab, radomInt2)
 					}
+					boolean = hangman.Alldiff(tab)
 				}
-				//Ascci = Reprandletter(Ascci, tab)
+				for i := 0; i < len(tab); i++ {
+					//Ascci[tab[i]] = lettertoascci(string(Mot[tab[i]]))
+				}
 
+				// Debut du jeu
 				for (cpt != 10) || (lettremanque != 0) {
 					fmt.Printf("Good Luck, you have %v attempts.", 10-cpt)
 					fmt.Printf("\n")
-					fmt.Print("Ecrire des lettres en minuscules s'il vous plaît")
+					hangman.Prtword(Ascci)
+					//hangman.Posehang(cpt)
+
+					fmt.Print("Merci d'écrire des lettres en minuscules s'il vous plaît : ")
 					var lettre string
 					fmt.Scan(&lettre)
 					for i := 0; i < len(Mot); i++ {
@@ -70,13 +77,15 @@ func main() {
 							lettremanque--
 						} else {
 							cpt++
-							//hangman.Posehang(cpt)
 						}
 					}
 				}
 				if cpt == 10 {
+					//hangman.Posehang(10)
 					fmt.Println("Dommage, lance une nouvelle partie pour réessayer")
+					break
 				} else if lettremanque == 0 {
+					hangman.Prtword(Ascci)
 					fmt.Printf("Bravo, tu as trouvé le bon mot qui était %v", Mot)
 				}
 
