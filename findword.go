@@ -1,7 +1,6 @@
 package hangman
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
@@ -33,24 +32,4 @@ func bytetoword(tab []byte) []string {
 		}
 	}
 	return tabl
-}
-
-func Alldiff(tab []int) bool {
-	for i := 0; i < len(tab)-1; i++ {
-		for j := i + 1; j < len(tab); j++ {
-			if tab[i] == tab[j] {
-				return false
-			}
-		}
-	}
-	return true
-}
-
-func Prtword(tab [][]string) {
-	for i := 0; i < len(tab[0]); i++ {
-		for j := 0; j < len(tab); j++ {
-			fmt.Printf(tab[j][i])
-		}
-		fmt.Printf("\n")
-	}
 }

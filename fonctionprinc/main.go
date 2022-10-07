@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 	"hangman"
-	"math/rand"
+	"io/ioutil"
 	"os"
-	"time"
 )
 
 func main() {
@@ -22,6 +21,11 @@ func main() {
 			fmt.Println("Une nouvelle partie a été lancée")
 			fmt.Printf("\n")
 
+			// Initialisation des variables
+			cpt := -1
+			var lettremanque int
+			Motdev := []string{}
+
 			Mot := ""
 			// Determiner le mot a deviner le mot à deviner
 			if len(os.Args[1:]) == 0 {
@@ -35,60 +39,85 @@ func main() {
 					return
 				}
 				Mot = hangman.Findword(contents)
-				//fmt.Println(mot)
+				fmt.Println(Mot)
 
-				// Initialisation des varibles
-				var cpt int
-				var lettremanque int
-				Ascci := [][]string{}
+				//Ascci := [][]string{}
 				for i := 0; i < len(Mot); i++ {
-					Ascci = append(Ascci, []string{})
+					//Ascci = append(Ascci, []string{})
+					Motdev = append(Motdev, "_")
 				}
 
-				// afficher aléatoirement n lettres
-				n := len(Mot)/2 - 1
-				tab := []int{}
-				boolean := false
-				for !boolean {
-					for i := 0; i < n; i++ {
-						rand.Seed(time.Now().UnixNano())
-						radomInt2 := rand.Intn(len(Mot))
-						tab = append(tab, radomInt2)
-					}
-					boolean = hangman.Alldiff(tab)
+				// affichage des n lettre Ascii
+				n := (len(Mot) / 2) - 1
+				lettremanque = len(Mot) - n
+				//fmt.Print(lettremanque)
+				Motdev = hangman.NLetter(Mot, Motdev)
+				//Ascci = hangman.NLetter(Mot, Ascci)
+				Motdev = hangman.NLetter(Mot, Motdev)
+
+				// Creation des niveux d'erreurs
+				content, err := ioutil.ReadFile("hangman.txt")
+				if err != nil {
+					return
 				}
-				for i := 0; i < len(tab); i++ {
-					//Ascci[tab[i]] = lettertoascci(string(Mot[tab[i]]))
-				}
+				//fmt.Print(content)
+				pendu := hangman.Pendu(content)
 
 				// Debut du jeu
-				for (cpt != 10) || (lettremanque != 0) {
-					fmt.Printf("Good Luck, you have %v attempts.", 10-cpt)
+				fmt.Printf("Good luck")
+				fmt.Printf("\n")
+				for (cpt != 9) && (lettremanque != 0) {
+					fmt.Printf("You have %v possible errors left", 10-(cpt+1))
 					fmt.Printf("\n")
-					hangman.Prtword(Ascci)
-					//hangman.Posehang(cpt)
+					fmt.Print(cpt)
+					fmt.Printf("\n")
+					//hangman.Prtword(Ascci)
+					for i := 0; i < len(Mot); i++ {
+						fmt.Printf(Motdev[i])
+					}
+					//fmt.Print(Motdev)
+					fmt.Printf("\n")
 
-					fmt.Print("Merci d'écrire des lettres en minuscules s'il vous plaît : ")
+					fmt.Printf("Merci d'écrire des lettres en minuscules s'il vous plaît : ")
 					var lettre string
 					fmt.Scan(&lettre)
+					let := 0
 					for i := 0; i < len(Mot); i++ {
 						if lettre == string(Mot[i]) {
 							//Ascci[i] = hangman.Lettertoascci(lettre)
 							lettremanque--
-						} else {
-							cpt++
+							let++
 						}
 					}
+					if let == 0 {
+						cpt++
+					}
+					if cpt == -1 {
+						fmt.Printf("José ce porte bien")
+						fmt.Printf("\n")
+					} else {
+						if cpt != 10 {
+							fmt.Print(pendu[cpt])
+						}
+						fmt.Printf("\n")
+						fmt.Println("José ce chie dessus")
+						fmt.Printf("\n")
+					}
 				}
-				if cpt == 10 {
-					//hangman.Posehang(10)
-					fmt.Println("Dommage, lance une nouvelle partie pour réessayer")
-					break
-				} else if lettremanque == 0 {
-					hangman.Prtword(Ascci)
-					fmt.Printf("Bravo, tu as trouvé le bon mot qui était %v", Mot)
+			}
+			if cpt == 9 {
+				//hangman.Posehang(10)
+				fmt.Println("Dommage, vous avez tué José. lance une nouvelle partie pour réessayer")
+				fmt.Printf("\n")
+			} else if lettremanque == 0 {
+				//hangman.Prtword(Ascci)
+				for i := 0; i < len(Mot); i++ {
+					fmt.Printf(Motdev[i])
 				}
-
+				fmt.Println("Bravo, Tu as sauvé José")
+				fmt.Printf("\n")
+				fmt.Printf("Tu as trouvé le bon mot qui était %v", Mot)
+				fmt.Printf("\n")
 			}
 
 		case "2":
