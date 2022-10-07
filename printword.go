@@ -20,6 +20,9 @@ func NLetter(Mot string, tableau /*[]*/ []string) []string { //[][]string {
 	n := len(Mot)/2 - 1
 	tab := []int{}
 	boolean := false
+	if n == 0 {
+		return tableau
+	}
 	for !boolean {
 		for i := 0; i < n; i++ {
 			rand.Seed(time.Now().UnixNano())
@@ -30,8 +33,9 @@ func NLetter(Mot string, tableau /*[]*/ []string) []string { //[][]string {
 	}
 	for i := 0; i < len(tab); i++ {
 		//tableau[tab[i]] = lettertoascci(string(Mot[tab[i]]))
-		tableau[tab[i]] = string(Mot[i])
+		tableau[tab[i]] = string(Mot[tab[i]])
 	}
+	fmt.Print(tab)
 	return tableau
 }
 

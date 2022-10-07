@@ -51,7 +51,6 @@ func main() {
 				n := (len(Mot) / 2) - 1
 				lettremanque = len(Mot) - n
 				//fmt.Print(lettremanque)
-				Motdev = hangman.NLetter(Mot, Motdev)
 				//Ascci = hangman.NLetter(Mot, Ascci)
 				Motdev = hangman.NLetter(Mot, Motdev)
 
@@ -85,6 +84,7 @@ func main() {
 					for i := 0; i < len(Mot); i++ {
 						if lettre == string(Mot[i]) {
 							//Ascci[i] = hangman.Lettertoascci(lettre)
+							Motdev[i] = string(Mot[i])
 							lettremanque--
 							let++
 						}
@@ -108,7 +108,8 @@ func main() {
 			if cpt == 9 {
 				//hangman.Posehang(10)
 				fmt.Println("Dommage, vous avez tué José. lance une nouvelle partie pour réessayer")
-				fmt.Printf("\n")
+				fmt.Printf("Le mot à trouver était : %v", Mot)
+				fmt.Println("\n")
 			} else if lettremanque == 0 {
 				//hangman.Prtword(Ascci)
 				for i := 0; i < len(Mot); i++ {
