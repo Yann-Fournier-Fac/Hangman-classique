@@ -1,5 +1,7 @@
 package main
 
+// Mettre toutes les lettres de la même longueur 
+
 import (
 	"fmt"
 	"hangman"
@@ -24,7 +26,8 @@ func main() {
 			// Initialisation des variables
 			cpt := -1
 			var lettremanque int
-			Motdev := []string{}
+			Ascci := [][]string{}
+			//Motdev := []string{}
 
 			Mot := ""
 			// Determiner le mot a deviner le mot à deviner
@@ -41,18 +44,17 @@ func main() {
 				Mot = hangman.Findword(contents)
 				fmt.Println(Mot)
 
-				//Ascci := [][]string{}
 				for i := 0; i < len(Mot); i++ {
-					//Ascci = append(Ascci, []string{})
-					Motdev = append(Motdev, "_")
+					Ascci = append(Ascci, []string{"         ", "         ", "         ", "         ", " _______ ", "|_______|"}) // 8 de longueur
+					//Motdev = append(Motdev, "_")
 				}
 
 				// affichage des n lettre Ascii
 				n := (len(Mot) / 2) - 1
 				lettremanque = len(Mot) - n
 				//fmt.Print(lettremanque)
-				//Ascci = hangman.NLetter(Mot, Ascci)
-				Motdev = hangman.NLetter(Mot, Motdev)
+				Ascci = hangman.NLetter(Mot, Ascci)
+				//Motdev = hangman.NLetter(Mot, Motdev)
 
 				// Creation des niveux d'erreurs
 				content, err := ioutil.ReadFile("hangman.txt")
@@ -70,10 +72,10 @@ func main() {
 					fmt.Printf("\n")
 					fmt.Print(cpt)
 					fmt.Printf("\n")
-					//hangman.Prtword(Ascci)
-					for i := 0; i < len(Mot); i++ {
+					hangman.Prtword(Ascci)
+					/*for i := 0; i < len(Mot); i++ {
 						fmt.Printf(Motdev[i])
-					}
+					}*/
 					//fmt.Print(Motdev)
 					fmt.Printf("\n")
 
@@ -83,8 +85,8 @@ func main() {
 					let := 0
 					for i := 0; i < len(Mot); i++ {
 						if lettre == string(Mot[i]) {
-							//Ascci[i] = hangman.Lettertoascci(lettre)
-							Motdev[i] = string(Mot[i])
+							Ascci[i] = hangman.Lettertoascii(lettre)
+							//Motdev[i] = string(Mot[i])
 							lettremanque--
 							let++
 						}
@@ -109,12 +111,12 @@ func main() {
 				//hangman.Posehang(10)
 				fmt.Println("Dommage, vous avez tué José. lance une nouvelle partie pour réessayer")
 				fmt.Printf("Le mot à trouver était : %v", Mot)
-				fmt.Println("\n")
+				fmt.Printf("\n")
 			} else if lettremanque == 0 {
-				//hangman.Prtword(Ascci)
-				for i := 0; i < len(Mot); i++ {
+				hangman.Prtword(Ascci)
+				/*for i := 0; i < len(Mot); i++ {
 					fmt.Printf(Motdev[i])
-				}
+				}*/
 				fmt.Println("Bravo, Tu as sauvé José")
 				fmt.Printf("\n")
 				fmt.Printf("Tu as trouvé le bon mot qui était %v", Mot)

@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"hangman"
+)
+
 func main() {
 
 	/*Motdev := []string{}
@@ -45,14 +50,14 @@ func main() {
 
 	//hangman := ReadFile(hangman.txt)
 	//tab := [][]string{[]string{" _ ", "| |", "| |", "| |", "|_|", "(_)"}, []string{"   _  _    ", " _| || |_  ", "|_  __  _| ", " _| || |_  ", "|_  __  _| ", "  |_||_|   "}}
-	//Ascci := [][]string{}
+	Ascci := [][]string{}
 	/*for i := 97; i <= 112; i++ {
 	      Ascci = append(Ascci, hangman.Lettertoascii(string(rune(i))))
 	  }
 	*/
 	//fmt.Print(Ascci)
-	/*var e int
-	for w := "send nudes"; e < len(w); {
+	var e int
+	for w := "abricot"; e < len(w); {
 		Ascci = append(Ascci, hangman.Lettertoascii(string(rune(w[e]))))
 		e++
 	}
@@ -61,7 +66,7 @@ func main() {
 			fmt.Printf(Ascci[j][i])
 		}
 		fmt.Printf("\n")
-	}*/
+	}
 
 	/*fmt.Println("Merci d'entrer un caractère à convertir :")
 	  letter := ""

@@ -15,7 +15,7 @@ func Prtword(tab [][]string) {
 	}
 }
 
-func NLetter(Mot string, tableau /*[]*/ []string) []string { //[][]string {
+func NLetter(Mot string, tableau [][]string) [][]string {
 	// afficher aléatoirement n lettres
 	n := len(Mot)/2 - 1
 	tab := []int{}
@@ -32,8 +32,8 @@ func NLetter(Mot string, tableau /*[]*/ []string) []string { //[][]string {
 		boolean = Alldiff(tab)
 	}
 	for i := 0; i < len(tab); i++ {
-		//tableau[tab[i]] = lettertoascci(string(Mot[tab[i]]))
-		tableau[tab[i]] = string(Mot[tab[i]])
+		tableau[tab[i]] = Lettertoascii(string(Mot[tab[i]]))
+		//tableau[tab[i]] = string(Mot[tab[i]])
 	}
 	fmt.Print(tab)
 	return tableau
