@@ -1,14 +1,8 @@
 package main
 
-import (
-	"fmt"
-	"hangman"
-	"os"
-)
-
 func main() {
 
-	Motdev := []string{}
+	/*Motdev := []string{}
 
 	if len(os.Args[1:]) == 0 {
 		fmt.Printf("File name missing\n")
@@ -45,5 +39,34 @@ func main() {
 		Motdev = hangman.NLetter(Mot, Motdev)
 		fmt.Print(Motdev)
 		fmt.Printf("\n")
+
+
+	}*/
+
+	//hangman := ReadFile(hangman.txt)
+	//tab := [][]string{[]string{" _ ", "| |", "| |", "| |", "|_|", "(_)"}, []string{"   _  _    ", " _| || |_  ", "|_  __  _| ", " _| || |_  ", "|_  __  _| ", "  |_||_|   "}}
+	//Ascci := [][]string{}
+	/*for i := 97; i <= 112; i++ {
+	      Ascci = append(Ascci, hangman.Lettertoascii(string(rune(i))))
+	  }
+	*/
+	//fmt.Print(Ascci)
+	/*var e int
+	for w := "send nudes"; e < len(w); {
+		Ascci = append(Ascci, hangman.Lettertoascii(string(rune(w[e]))))
+		e++
 	}
+	for i := 0; i < len(Ascci[0]); i++ {
+		for j := 0; j < len(Ascci); j++ {
+			fmt.Printf(Ascci[j][i])
+		}
+		fmt.Printf("\n")
+	}*/
+
+	/*fmt.Println("Merci d'entrer un caractère à convertir :")
+	  letter := ""
+	  fmt.Scan(&letter)
+	  tab := hangman.Lettertoascii(letter)
+	  fmt.Print(tab)*/
+
 }
