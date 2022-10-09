@@ -1,6 +1,6 @@
 package main
 
-// Mettre toutes les lettres de la même longueur 
+// faire un tableau des lettres déjà entrer
 
 import (
 	"fmt"
@@ -42,10 +42,10 @@ func main() {
 					return
 				}
 				Mot = hangman.Findword(contents)
-				fmt.Println(Mot)
+				//fmt.Println(Mot)
 
 				for i := 0; i < len(Mot); i++ {
-					Ascci = append(Ascci, []string{"         ", "         ", "         ", "         ", " _______ ", "|_______|"}) // 8 de longueur
+					Ascci = append(Ascci, []string{"             ", "             ", "             ", "             ", " ___________ ", "|___________|", "              "}) // 7 éléments
 					//Motdev = append(Motdev, "_")
 				}
 

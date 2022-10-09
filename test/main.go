@@ -56,14 +56,16 @@ func main() {
 	  }
 	*/
 	//fmt.Print(Ascci)
+
 	var e int
-	for w := "abricot"; e < len(w); {
+	for w := "ab"; e < len(w); {
 		Ascci = append(Ascci, hangman.Lettertoascii(string(rune(w[e]))))
 		e++
 	}
 	for i := 0; i < len(Ascci[0]); i++ {
 		for j := 0; j < len(Ascci); j++ {
 			fmt.Printf(Ascci[j][i])
+			//fmt.Printf("@")
 		}
 		fmt.Printf("\n")
 	}
