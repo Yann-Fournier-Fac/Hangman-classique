@@ -1,11 +1,50 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"hangman"
+	"os"
+	//"devt.de/krotik/common/termutil/getch"
 )
 
+/*func Clear() {
+	var KeyPress *getch.KeyEvent
+
+	if err := getch.Start(); err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer getch.Stop()
+
+	KeyPress, _ = getch.Getch()
+	fmt.Print(KeyPress)
+}*/
+
 func main() {
+
+	f, err := os.Open("words.txt")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	scanner.Split(bufio.ScanWords)
+
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println(err)
+	}
+
+	/*nbr := []int{}
+	for i := 0; i < len(nbr); i++ {
+		fmt.Print(nbr[i])
+	}*/
 
 	/*Motdev := []string{}
 
@@ -50,14 +89,14 @@ func main() {
 
 	//hangman := ReadFile(hangman.txt)
 	//tab := [][]string{[]string{" _ ", "| |", "| |", "| |", "|_|", "(_)"}, []string{"   _  _    ", " _| || |_  ", "|_  __  _| ", " _| || |_  ", "|_  __  _| ", "  |_||_|   "}}
-	Ascci := [][]string{}
+	//Ascci := [][]string{}
 	/*for i := 97; i <= 112; i++ {
 	      Ascci = append(Ascci, hangman.Lettertoascii(string(rune(i))))
 	  }
 	*/
 	//fmt.Print(Ascci)
 
-	var e int
+	/*var e int
 	for w := "ab"; e < len(w); {
 		Ascci = append(Ascci, hangman.Lettertoascii(string(rune(w[e]))))
 		e++
@@ -68,7 +107,7 @@ func main() {
 			//fmt.Printf("@")
 		}
 		fmt.Printf("\n")
-	}
+	}*/
 
 	/*fmt.Println("Merci d'entrer un caractère à convertir :")
 	  letter := ""

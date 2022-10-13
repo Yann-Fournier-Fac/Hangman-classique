@@ -35,7 +35,7 @@ func NLetter(Mot string, tableau [][]string) [][]string {
 		tableau[tab[i]] = Lettertoascii(string(Mot[tab[i]]))
 		//tableau[tab[i]] = string(Mot[tab[i]])
 	}
-	fmt.Print(tab)
+	//fmt.Print(tab)
 	return tableau
 }
 
