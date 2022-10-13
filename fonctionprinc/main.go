@@ -5,13 +5,9 @@ package main
 // faire une bibliothèque de mots
 
 import (
-	"bufio"
 	"fmt"
 	"hangman"
-	"math/rand"
-	"os"
 	"strings"
-	"time"
 )
 
 func main() {
@@ -33,110 +29,81 @@ func main() {
 			var lettremanque int
 			Ascci := [][]string{}
 			Mot := ""
-			var Words []string
+			//var Pendu []string
 			//Lettre := []string{} // pour les lettres deja dites
 			//Dictionnaire := []string{}
 
 			// Determiner le mot a deviner le mot à deviner
-			if len(os.Args[1:]) == 0 {
-				fmt.Printf("File name missing\n")
-			} else if len(os.Args[1:]) > 1 {
-				fmt.Printf("Too many arguments\n")
-			} else {
-				contents, err := os.Open(os.Args[1])
-				if err != nil {
-					fmt.Println("File reading error", err)
-					return
-				}
-				defer contents.Close()
+			Mot = hangman.Findword()
+			fmt.Println(Mot)
 
-				scanner := bufio.NewScanner(contents)
-				scanner.Split(bufio.ScanWords)
+			if Mot == "Veuillez relancer le jeux" {
+				fmt.Println("Veuillez relancer le jeux")
+				return
+			}
 
-				for scanner.Scan() {
-					Words = append(Words, scanner.Text())
-				}
+			for i := 0; i < len(Mot); i++ {
+				Ascci = append(Ascci, []string{"             ", "             ", "             ", "             ", " ___________ ", "|___________|", "              "}) // 7 éléments
+			}
 
-				if err := scanner.Err(); err != nil {
-					fmt.Println(err)
-				}
+			// affichage des n lettre Ascii
+			n := (len(Mot) / 2) - 1
+			lettremanque = len(Mot) - n
+			Ascci = hangman.NLetter(Mot, Ascci)
 
-				rand.Seed(time.Now().UnixNano())
-				nbr := rand.Intn(len(Words))
-				Mot = Words[nbr]
-
-				fmt.Println(Mot)
-
-				for i := 0; i < len(Mot); i++ {
-					Ascci = append(Ascci, []string{"             ", "             ", "             ", "             ", " ___________ ", "|___________|", "              "}) // 7 éléments
-				}
-
-				// affichage des n lettre Ascii
-				n := (len(Mot) / 2) - 1
-				lettremanque = len(Mot) - n
-				Ascci = hangman.NLetter(Mot, Ascci)
-
-				// Creation des niveux d'erreurs
-				content, err := os.ReadFile("hangman.txt")
-				if err != nil {
-					return
-				}
-				pendu := hangman.Pendu(content)
-
-				// Debut du jeu
-				fmt.Printf("Good luck")
+			// Debut du jeu
+			fmt.Printf("Good luck")
+			fmt.Printf("\n")
+			for (cpt != 9) && (lettremanque != 0) {
+				fmt.Printf("You have %v possible errors left", 10-(cpt+1))
 				fmt.Printf("\n")
-				for (cpt != 9) && (lettremanque != 0) {
-					fmt.Printf("You have %v possible errors left", 10-(cpt+1))
-					fmt.Printf("\n")
-					hangman.Prtword(Ascci)
-					fmt.Printf("\n")
+				hangman.Prtword(Ascci)
+				fmt.Printf("\n")
 
-					fmt.Printf("Ecrivez une lettre ou un mot s'il vous plaît : ")
-					var lettre string
-					fmt.Scan(&lettre)
-					lettre = strings.ToLower(lettre)
-					/*if len(Lettre) != 0 {
-						for i := 0; i < len(Lettre); i++ {
-							if
-						}
-					}*/
-					let := 0
-					for i := 0; i < len(Mot); i++ {
-						if lettre == string(Mot[i]) {
-							Ascci[i] = hangman.Lettertoascii(lettre)
-							lettremanque--
-							let++
-						}
+				fmt.Printf("Ecrivez une lettre ou un mot s'il vous plaît : ")
+				var lettre string
+				fmt.Scan(&lettre)
+				lettre = strings.ToLower(lettre)
+				/*if len(Lettre) != 0 {
+					for i := 0; i < len(Lettre); i++ {
+						if
 					}
-					if let == 0 {
-						cpt++
+				}*/
+				let := 0
+				for i := 0; i < len(Mot); i++ {
+					if lettre == string(Mot[i]) {
+						Ascci[i] = hangman.Lettertoascii(lettre)
+						lettremanque--
+						let++
 					}
-					if cpt == -1 {
-						fmt.Printf("José ce porte bien")
-						fmt.Printf("\n")
-					} else {
-						if cpt != 10 {
-							fmt.Print(pendu[cpt])
-						}
-						fmt.Printf("\n")
-						fmt.Println("José se chie dessus")
-						fmt.Printf("\n")
-					}
-
 				}
-				if cpt == 9 {
-					fmt.Println("Dommage, vous avez tué José. lance une nouvelle partie pour réessayer")
-					fmt.Printf("Le mot à trouver était : %v", Mot)
+				if let == 0 {
+					cpt++
+				}
+				if cpt == -1 {
+					fmt.Printf("José ce porte bien")
 					fmt.Printf("\n")
-				} else if lettremanque == 0 {
-					hangman.Prtword(Ascci)
-					fmt.Println("Bravo, Tu as sauvé José")
+				} else {
+					if cpt != 10 {
+						hangman.Hangmanpose(cpt)
+					}
 					fmt.Printf("\n")
-					fmt.Printf("Tu as trouvé le bon mot qui était %v", Mot)
-					fmt.Printf("\n")
+					fmt.Println("José se chie dessus")
 					fmt.Printf("\n")
 				}
+
+			}
+			if cpt == 9 {
+				fmt.Println("Dommage, vous avez tué José. lance une nouvelle partie pour réessayer")
+				fmt.Printf("Le mot à trouver était : %v", Mot)
+				fmt.Printf("\n")
+			} else if lettremanque == 0 {
+				hangman.Prtword(Ascci)
+				fmt.Println("Bravo, Tu as sauvé José")
+				fmt.Printf("\n")
+				fmt.Printf("Tu as trouvé le bon mot qui était %v", Mot)
+				fmt.Printf("\n")
+				fmt.Printf("\n")
 			}
 
 		case "2":

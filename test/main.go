@@ -3,9 +3,25 @@ package main
 import (
 	"bufio"
 	"fmt"
+
+	//"io"
 	"os"
 	//"devt.de/krotik/common/termutil/getch"
 )
+
+func hangman(hp int) {
+	f, _ := os.Open("hangman.txt")
+	scanner := bufio.NewScanner(f)
+	var line int
+	a := 71 - hp*8
+	b := 78 - hp*8
+	for scanner.Scan() {
+		if line >= a && line <= b {
+			fmt.Println(scanner.Text())
+		}
+		line++
+	}
+}
 
 /*func Clear() {
 	var KeyPress *getch.KeyEvent
@@ -22,7 +38,47 @@ import (
 
 func main() {
 
-	f, err := os.Open("words.txt")
+	hangman(3)
+
+	/*file, err := os.Open("hangman.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+
+	for {
+		line, _, err := reader.ReadLine()
+
+		if err == io.EOF {
+			break
+		}
+		fmt.Println(line)
+		fmt.Printf("%s \n", line)
+	}*/
+
+	// Creation des niveux d'erreurs
+	/*content, err := os.Open("hangman.txt")
+	if err != nil {
+		return
+	}
+	defer content.Close()
+
+	scanner := bufio.NewScanner(content)
+	//scanner.Split(bufio.ScanWords)
+
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println(err)
+	}*/
+	//pendu := hangman.Pendu(content)
+
+	/*f, err := os.Open("words.txt")
 
 	if err != nil {
 		fmt.Println(err)
@@ -39,7 +95,7 @@ func main() {
 
 	if err := scanner.Err(); err != nil {
 		fmt.Println(err)
-	}
+	}*/
 
 	/*nbr := []int{}
 	for i := 0; i < len(nbr); i++ {
