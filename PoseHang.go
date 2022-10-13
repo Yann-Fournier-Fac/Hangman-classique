@@ -3,6 +3,7 @@ package hangman
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -27,7 +28,40 @@ import (
 	return tab
 }*/
 
-func Hangmanpose(hp int) {
+func Hangmanpose() []string {
+	var pose []string
+	file, err := os.Open("hangman.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+
+	for {
+		line, _, err := reader.ReadLine()
+
+		if err == io.EOF {
+			break
+		}
+		pose = append(pose, string(line))
+		//fmt.Printf("%s \n", line)
+	}
+	return pose
+}
+
+func Hang(hp int, pose []string) {
+	a := 0 + hp*8
+	b := 7 + hp*8
+	for i := a; i <= b; i++ {
+		fmt.Print(pose[i])
+		fmt.Printf("\n")
+	}
+
+}
+
+/*func Hangmanpose(hp int) {
 	f, _ := os.Open("hangman.txt")
 	scanner := bufio.NewScanner(f)
 	var line int
@@ -39,4 +73,4 @@ func Hangmanpose(hp int) {
 		}
 		line++
 	}
-}
+}*/

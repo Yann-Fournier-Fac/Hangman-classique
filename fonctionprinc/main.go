@@ -29,7 +29,7 @@ func main() {
 			var lettremanque int
 			Ascci := [][]string{}
 			Mot := ""
-			//var Pendu []string
+			var Pendu []string
 			//Lettre := []string{} // pour les lettres deja dites
 			//Dictionnaire := []string{}
 
@@ -50,6 +50,8 @@ func main() {
 			n := (len(Mot) / 2) - 1
 			lettremanque = len(Mot) - n
 			Ascci = hangman.NLetter(Mot, Ascci)
+
+			Pendu = hangman.Hangmanpose()
 
 			// Debut du jeu
 			fmt.Printf("Good luck")
@@ -85,7 +87,7 @@ func main() {
 					fmt.Printf("\n")
 				} else {
 					if cpt != 10 {
-						hangman.Hangmanpose(cpt)
+						hangman.Hang(cpt, Pendu)
 					}
 					fmt.Printf("\n")
 					fmt.Println("José se chie dessus")

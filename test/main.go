@@ -3,13 +3,15 @@ package main
 import (
 	"bufio"
 	"fmt"
-
-	//"io"
+	"io"
 	"os"
-	//"devt.de/krotik/common/termutil/getch"
 )
 
-func hangman(hp int) {
+//"io"
+
+//"devt.de/krotik/common/termutil/getch"
+
+/*func hangman(hp int) {
 	f, _ := os.Open("hangman.txt")
 	scanner := bufio.NewScanner(f)
 	var line int
@@ -21,7 +23,7 @@ func hangman(hp int) {
 		}
 		line++
 	}
-}
+}*/
 
 /*func Clear() {
 	var KeyPress *getch.KeyEvent
@@ -36,11 +38,26 @@ func hangman(hp int) {
 	fmt.Print(KeyPress)
 }*/
 
+func hang(hp int, pose []string) {
+	a := 0 + hp*8
+	b := 7 + hp*8
+	for i := a; i <= b; i++ {
+		fmt.Print(pose[i])
+		fmt.Printf("\n")
+	}
+
+}
+
 func main() {
+	pose := []string{}
+	/*pose = hangman.Hangmanpose()
+	fmt.Print(pose)
+	for i := 0; i < len(pose); i++ {
+		fmt.Print(pose[i])
+		fmt.Printf("\n")
+	}*/
 
-	hangman(3)
-
-	/*file, err := os.Open("hangman.txt")
+	file, err := os.Open("hangman.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -55,9 +72,14 @@ func main() {
 		if err == io.EOF {
 			break
 		}
-		fmt.Println(line)
-		fmt.Printf("%s \n", line)
-	}*/
+		pose = append(pose, string(line))
+		//fmt.Printf("%s \n", line)
+	}
+
+	for i := 0; i < 10; i++ {
+		hang(i, pose)
+	}
+	
 
 	// Creation des niveux d'erreurs
 	/*content, err := os.Open("hangman.txt")
