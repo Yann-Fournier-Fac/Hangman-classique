@@ -30,12 +30,12 @@ func main() {
 			Ascci := [][]string{}
 			Mot := ""
 			var Pendu []string
-			//Lettre := []string{} // pour les lettres deja dites
+			Lettre := []string{} // pour les lettres deja dites
 			//Dictionnaire := []string{}
 
 			// Determiner le mot a deviner le mot à deviner
 			Mot = hangman.Findword()
-			fmt.Println(Mot)
+			//fmt.Println(Mot)
 
 			if Mot == "Veuillez relancer le jeux" {
 				fmt.Println("Veuillez relancer le jeux")
@@ -49,7 +49,7 @@ func main() {
 			// affichage des n lettre Ascii
 			n := (len(Mot) / 2) - 1
 			lettremanque = len(Mot) - n
-			Ascci = hangman.NLetter(Mot, Ascci)
+			Ascci, Lettre = hangman.NLetter(Mot, Ascci, Lettre)
 
 			Pendu = hangman.Hangmanpose()
 
@@ -57,30 +57,69 @@ func main() {
 			fmt.Printf("Good luck")
 			fmt.Printf("\n")
 			for (cpt != 9) && (lettremanque != 0) {
+				//fmt.Print(Lettre)
+				//fmt.Printf("\n")
+
+				// Affichage du nombre d'essais restant et du mot en Ascci-art
 				fmt.Printf("You have %v possible errors left", 10-(cpt+1))
 				fmt.Printf("\n")
 				hangman.Prtword(Ascci)
 				fmt.Printf("\n")
 
+				// le joueur entrer quelque chose
 				fmt.Printf("Ecrivez une lettre ou un mot s'il vous plaît : ")
 				var lettre string
 				fmt.Scan(&lettre)
-				lettre = strings.ToLower(lettre)
-				/*if len(Lettre) != 0 {
+
+				// comparer le mot rentrer par le joueur
+				if len(lettre) >= 2 {
+					if len(lettre) == len(Mot) {
+						var cpt2 int
+						for i := 0; i < len(Mot); i++ {
+							if lettre[i] == Mot[i] {
+								cpt2++
+							}
+						}
+						if cpt2 == len(Mot) {
+							lettremanque = 0
+						} else {
+							cpt += 2
+							//hangman.Hang(cpt, Pendu)
+							fmt.Println("Ce n'était pas le bon mot")
+						}
+					} else if len(lettre) != len(Mot) {
+						cpt += 2
+						//hangman.Hang(cpt, Pendu)
+						fmt.Println("Ce n'était pas le bon mot")
+					}
+
+					// Sinon comparer la lettre rentrer par le joueur
+				} else {
+					var cpt4 int = 0
+					lettre = strings.ToLower(lettre)
 					for i := 0; i < len(Lettre); i++ {
-						if
+						if lettre == Lettre[i] {
+							cpt4++
+							break
+						}
 					}
-				}*/
-				let := 0
-				for i := 0; i < len(Mot); i++ {
-					if lettre == string(Mot[i]) {
-						Ascci[i] = hangman.Lettertoascii(lettre)
-						lettremanque--
-						let++
+					if cpt4 == 0 {
+						Lettre = append(Lettre, lettre)
+						let := 0
+						for i := 0; i < len(Mot); i++ {
+							if lettre == string(Mot[i]) {
+								Ascci[i] = hangman.Lettertoascii(lettre)
+								lettremanque--
+								let++
+							}
+						}
+						cpt4 = 0
+						if let == 0 {
+							cpt++
+						}
+					} else {
+						fmt.Println("Cette lettre à déjà été rentrée")
 					}
-				}
-				if let == 0 {
-					cpt++
 				}
 				if cpt == -1 {
 					fmt.Printf("José ce porte bien")
@@ -100,6 +139,9 @@ func main() {
 				fmt.Printf("Le mot à trouver était : %v", Mot)
 				fmt.Printf("\n")
 			} else if lettremanque == 0 {
+				for i := 0; i < len(Mot); i++ {
+					Ascci[i] = hangman.Lettertoascii(string(Mot[i]))
+				}
 				hangman.Prtword(Ascci)
 				fmt.Println("Bravo, Tu as sauvé José")
 				fmt.Printf("\n")
