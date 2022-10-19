@@ -56,7 +56,7 @@ func main() {
 			// Debut du jeu
 			fmt.Printf("Good luck")
 			fmt.Printf("\n")
-			for (cpt != 9) && (lettremanque != 0) {
+			for (cpt < 9) && (lettremanque != 0) {
 				//fmt.Print(Lettre)
 				//fmt.Printf("\n")
 
@@ -134,9 +134,10 @@ func main() {
 				}
 
 			}
-			if cpt == 9 {
+			if cpt >= 9 {
 				fmt.Println("Dommage, vous avez tué José. lance une nouvelle partie pour réessayer")
 				fmt.Printf("Le mot à trouver était : %v", Mot)
+				fmt.Printf("\n")
 				fmt.Printf("\n")
 			} else if lettremanque == 0 {
 				for i := 0; i < len(Mot); i++ {
