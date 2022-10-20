@@ -28,6 +28,8 @@ import (
 	return tab
 }*/
 
+// Récupération des positions du Pendu
+// on renvoi un tableau de string ou chaque string correspond a une ligne du fichier hangman.txt
 func Hangmanpose() []string {
 	var pose []string
 	file, err := os.Open("hangman.txt")
@@ -51,6 +53,8 @@ func Hangmanpose() []string {
 	return pose
 }
 
+// Affichage du Pendu
+// Donc on affiche seulement les lignes que l'on souhaite
 func Hang(hp int, pose []string) {
 	a := 0 + hp*8
 	b := 7 + hp*8
@@ -61,16 +65,3 @@ func Hang(hp int, pose []string) {
 
 }
 
-/*func Hangmanpose(hp int) {
-	f, _ := os.Open("hangman.txt")
-	scanner := bufio.NewScanner(f)
-	var line int
-	a := 0 + hp*8
-	b := 7 + hp*8
-	for scanner.Scan() {
-		if line >= a && line <= b {
-			fmt.Println(scanner.Text())
-		}
-		line++
-	}
-}*/

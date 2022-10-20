@@ -2,6 +2,8 @@ package hangman
 
 import "fmt"
 
+// Tableau de string representant chacun une lettre en Ascii-Art
+
 func Lettertoascii(s string) []string {
 	tab := []string{}
 	switch s {

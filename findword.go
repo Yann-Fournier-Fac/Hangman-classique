@@ -1,5 +1,7 @@
 package hangman
 
+// faire un dictionnaire
+
 import (
 	"bufio"
 	"fmt"
@@ -38,36 +40,63 @@ func bytetoword(tab []byte) []string {
 }*/
 
 func Findword() string {
+
+	// Initialisation Variables
 	var Mot string
 	var words []string
-	if len(os.Args[1:]) == 0 {
-		fmt.Printf("Il manque le nom d'un fichier text en argument\n")
-		return "Veuillez relancer le jeux"
-	} else if len(os.Args[1:]) > 1 {
-		fmt.Printf("Il y a trop d'argument\n")
-		return "Veuillez relancer le jeux"
-	} else {
-		contents, err := os.Open(os.Args[1])
-		if err != nil {
-			fmt.Println("File reading error", err)
+	Dictionnaire := [][]string{}
+
+	// Si aucun fichier txt est placé en paramettre
+	if len(os.Args[1:]) != 1 {
+		Dictionnaire = append(Dictionnaire, readfile("words.txt"))
+		Dictionnaire = append(Dictionnaire, readfile("words2.txt"))
+		Dictionnaire = append(Dictionnaire, readfile("words3.txt"))
+		for _, txt := range Dictionnaire {
+			for _, i := range txt {
+				words = append(words, i)
+			}
+		}
+		if len(words) != 0 {
+			rand.Seed(time.Now().UnixNano())
+			nbr := rand.Intn(len(words))
+			Mot = words[nbr]
+			return Mot
+		} else {
 			return "Veuillez relancer le jeux"
 		}
-		defer contents.Close()
-
-		scanner := bufio.NewScanner(contents)
-		scanner.Split(bufio.ScanWords)
-
-		for scanner.Scan() {
-			words = append(words, scanner.Text())
+		// Sinon ...
+	} else {
+		words = readfile(os.Args[1])
+		if len(words) != 0 {
+			rand.Seed(time.Now().UnixNano())
+			nbr := rand.Intn(len(words))
+			Mot = words[nbr]
+			return Mot
+		} else {
+			return "Veuillez relancer le jeux"
 		}
-
-		if err := scanner.Err(); err != nil {
-			fmt.Println(err)
-		}
-
-		rand.Seed(time.Now().UnixNano())
-		nbr := rand.Intn(len(words))
-		Mot = words[nbr]
 	}
-	return Mot
+}
+
+func readfile(name string) []string {
+	words := []string{}
+	contents, err := os.Open(name)
+	if err != nil {
+		fmt.Println("File reading error", err)
+		fmt.Println("Veuillez relencer le jeux")
+		return words
+	}
+	defer contents.Close()
+
+	scanner := bufio.NewScanner(contents)
+	scanner.Split(bufio.ScanWords)
+
+	for scanner.Scan() {
+		words = append(words, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println(err)
+	}
+	return words
 }
