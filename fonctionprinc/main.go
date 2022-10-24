@@ -69,6 +69,10 @@ func main() {
 				hangman.Prtword(Ascci)
 				fmt.Printf("\n")
 
+				fmt.Println("Voici les lettres déjà entrée :")
+				fmt.Print(Lettre)
+				fmt.Printf("\n")
+
 				// le joueur entre quelque chose
 				fmt.Printf("Ecrivez une lettre ou un mot s'il vous plaît : ")
 				var lettre string
@@ -154,7 +158,11 @@ func main() {
 			// fin du jeu
 			if cpt >= 9 { // les 10 essays ont été utilisé
 				fmt.Println("Dommage, vous avez tué José. lance une nouvelle partie pour réessayer")
-				fmt.Printf("Le mot à trouver était : %v", Mot)
+				fmt.Printf("Le mot à trouver était : %v \n", Mot)
+				for i := 0; i < len(Mot); i++ {
+					Ascci[i] = hangman.Lettertoascii(string(Mot[i]))
+				}
+				hangman.Prtword(Ascci)
 				fmt.Printf("\n")
 				fmt.Printf("\n")
 
