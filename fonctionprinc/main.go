@@ -8,6 +8,8 @@ import (
 	"hangman"
 	"os"
 	"os/exec"
+
+	//"reflect"
 	"strings"
 )
 
@@ -48,7 +50,7 @@ func main() {
 			// affichage des n lettre Ascii
 			n := (len(Mot) / 2) - 1
 			lettremanque = len(Mot) - n
-			Ascci, Lettre = hangman.NLetter(Mot, Ascci, Lettre)
+			Ascci = hangman.NLetter(Mot, Ascci)
 
 			Pendu = hangman.Hangmanpose()
 
@@ -64,7 +66,17 @@ func main() {
 				//fmt.Printf("\n")
 
 				// Affichage du nombre d'essais restant et du mot en Ascci-art
-				fmt.Printf("You have %v possible errors left", 10-(cpt+1))
+				if cpt >= 7 {
+					fmt.Printf(hangman.Red+"You have %v possible errors left\n", 10-(cpt+1))
+					fmt.Println(hangman.Reset)
+				} else if cpt >= 4 && cpt < 7 {
+					fmt.Printf(hangman.Yellow+"You have %v possible errors left\n", 10-(cpt+1))
+					fmt.Println(hangman.Reset)
+				} else {
+					fmt.Printf(hangman.Green+"You have %v possible errors left\n", 10-(cpt+1))
+					fmt.Println(hangman.Reset)
+				}
+
 				fmt.Printf("\n")
 				hangman.Prtword(Ascci)
 				fmt.Printf("\n")
@@ -97,12 +109,12 @@ func main() {
 						} else {
 							cpt += 2
 							//hangman.Hang(cpt, Pendu)
-							fmt.Println("Ce n'était pas le bon mot")
+							fmt.Println(hangman.Purple + "Ce n'était pas le bon mot" + hangman.Reset)
 						}
 					} else if len(lettre) != len(Mot) {
 						cpt += 2
 						//hangman.Hang(cpt, Pendu)
-						fmt.Println("Ce n'était pas le bon mot")
+						fmt.Println(hangman.Purple + "Ce n'était pas le bon mot" + hangman.Reset)
 					}
 
 				} else { // Sinon comparer la lettre rentrer par le joueur
@@ -137,27 +149,32 @@ func main() {
 						}
 
 					} else {
-						fmt.Println("Cette lettre à déjà été rentrée")
+						fmt.Println(hangman.Purple + "Cette lettre à déjà été rentrée" + hangman.Reset)
 					}
 				}
 
 				// Afficher le pendu
 				if cpt == -1 {
-					fmt.Printf("José ce porte bien")
+					fmt.Printf(hangman.Green + "José se porte bien" + hangman.Reset)
 					fmt.Printf("\n")
 				} else {
 					if cpt != 10 {
 						hangman.Hang(cpt, Pendu)
 					}
 					fmt.Printf("\n")
-					fmt.Println("José est en danger")
-					fmt.Printf("\n")
+					if cpt < 6 {
+						fmt.Println(hangman.Yellow + "José est en danger" + hangman.Reset)
+						fmt.Printf("\n")
+					} else {
+						fmt.Println(hangman.Red + "José est en danger" + hangman.Reset)
+						fmt.Printf("\n")
+					}
 				}
 			}
 
 			// fin du jeu
 			if cpt >= 9 { // les 10 essays ont été utilisé
-				fmt.Println("Dommage, vous avez tué José. lance une nouvelle partie pour réessayer")
+				fmt.Println(hangman.Red + "Dommage, vous avez tué José. lance une nouvelle partie pour réessayer" + hangman.Reset)
 				fmt.Printf("Le mot à trouver était : %v \n", Mot)
 				for i := 0; i < len(Mot); i++ {
 					Ascci[i] = hangman.Lettertoascii(string(Mot[i]))
@@ -174,7 +191,7 @@ func main() {
 				}
 				hangman.Prtword(Ascci)
 
-				fmt.Println("Bravo, Tu as sauvé José")
+				fmt.Println(hangman.Green + "Bravo, Tu as sauvé José" + hangman.Reset)
 				fmt.Printf("\n")
 				fmt.Printf("Tu as trouvé le bon mot qui était %v", Mot)
 				fmt.Printf("\n")

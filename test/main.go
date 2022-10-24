@@ -1,11 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"io"
-	"os"
-	"os/exec"
 )
 
 //"io"
@@ -39,7 +35,7 @@ import (
 	fmt.Print(KeyPress)
 }*/
 
-func hang(hp int, pose []string) {
+func Hang(hp int, pose []string) {
 	a := 0 + hp*8
 	b := 7 + hp*8
 	for i := a; i <= b; i++ {
@@ -50,7 +46,8 @@ func hang(hp int, pose []string) {
 }
 
 func main() {
-	pose := []string{}
+
+	//pose := []string{}
 	/*pose = hangman.Hangmanpose()
 	fmt.Print(pose)
 	for i := 0; i < len(pose); i++ {
@@ -58,7 +55,7 @@ func main() {
 		fmt.Printf("\n")
 	}*/
 
-	file, err := os.Open("hangman.txt")
+	/*file, err := os.Open("hangman.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -83,7 +80,7 @@ func main() {
 
 	c := exec.Command("clear")
 	c.Stdout = os.Stdout
-	c.Run()
+	c.Run()*/
 
 	// Creation des niveux d'erreurs
 	/*content, err := os.Open("hangman.txt")
