@@ -3,8 +3,10 @@ package main
 // faire la sauvegarde
 
 import (
+	"bufio"
 	"fmt"
 	"hangman"
+	"io"
 	"os"
 	"os/exec"
 	//"reflect"
@@ -121,8 +123,24 @@ func main() {
 			fmt.Println("Continuer la partie sauvegardée")
 			fmt.Printf("\n")
 		case "3":
-			fmt.Println("readme")
-			fmt.Printf("\n")
+			file, err := os.Open("readme.txt")
+			if err != nil {
+				panic(err)
+			}
+
+			defer file.Close()
+
+			reader := bufio.NewReader(file)
+
+			for {
+				line, _, err := reader.ReadLine()
+
+				if err == io.EOF {
+					break
+				}
+
+				fmt.Println(string(line))
+			}
 		case "4":
 			return
 		}
