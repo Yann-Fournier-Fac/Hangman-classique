@@ -7,24 +7,14 @@ import (
 	"strings"
 )
 
-func JeuBase() {
-	// Initialisation des variables
-	cpt := -1
-	var lettremanque int
-	MotATrouver := []string{}
-	Mot := ""
-	var Pendu []string
-	Lettre := []string{} // pour les lettres deja dites
+func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu []string, Lettre []string) (int, int, []string, string, []string, []string, bool) {
+
+	var Stop bool = false
+	var stop string = "stop"
 
 	// Determiner le mot a deviner le mot à deviner
 	Mot = Findword()
 	//fmt.Println(Mot)
-
-	// on teste que le mot soit bon
-	if Mot == "Veuillez relancer le jeux" {
-		fmt.Println("Veuillez relancer le jeux")
-		return
-	}
 
 	// creation des "_" en Ascii
 	for i := 0; i < len(Mot); i++ {
@@ -35,8 +25,6 @@ func JeuBase() {
 	n := (len(Mot) / 2) - 1
 	lettremanque = len(Mot) - n
 	MotATrouver = NLetterBase(Mot, MotATrouver)
-
-	Pendu = Hangmanpose()
 
 	// Debut du jeu
 	fmt.Println("Une nouvelle partie a été lancée")
@@ -66,9 +54,11 @@ func JeuBase() {
 			fmt.Printf(MotATrouver[i])
 		}
 		fmt.Printf("\n")
+		fmt.Printf("\n")
 
 		fmt.Println("Voici les lettres déjà entrée :")
 		fmt.Print(Lettre)
+		fmt.Printf("\n")
 		fmt.Printf("\n")
 
 		// le joueur entre quelque chose
@@ -81,9 +71,20 @@ func JeuBase() {
 		c.Stdout = os.Stdout
 		c.Run()
 
+		// voir si il veut arreter:
+
 		// comparer le mot rentrer par le joueur
 		if len(lettre) >= 2 {
-			if len(lettre) == len(Mot) {
+			if len(lettre) == 4 {
+				for i := 0; i < len(lettre); i++ {
+					if strings.ToLower(string(lettre[i])) != string(stop[i]) {
+						break
+					} else {
+						Stop = true
+						return cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop
+					}
+				}
+			} else if len(lettre) == len(Mot) {
 				var cpt2 int // compteur de lettre correspondentes
 				for i := 0; i < len(Mot); i++ {
 					let := strings.ToLower(string(lettre[i]))
@@ -171,6 +172,7 @@ func JeuBase() {
 		fmt.Printf("Le mot à trouver était : %v \n", Mot)
 		fmt.Printf("\n")
 		fmt.Printf("\n")
+		return cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop
 
 	} else if lettremanque == 0 { // Toutes les lettres ont été trouvée
 
@@ -185,5 +187,7 @@ func JeuBase() {
 		fmt.Printf("Tu as trouvé le bon mot qui était %v", Mot)
 		fmt.Printf("\n")
 		fmt.Printf("\n")
+		return cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop
 	}
+	return cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop
 }

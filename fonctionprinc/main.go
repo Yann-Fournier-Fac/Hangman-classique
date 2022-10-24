@@ -1,7 +1,6 @@
 package main
 
-// régler bug ajout des lettres
-// faire une fonction clear()
+// faire la sauvegarde
 
 import (
 	"fmt"
@@ -30,7 +29,24 @@ func main() {
 		switch str {
 		case "1":
 
+			// Initialisation des variables
+			cpt := -1
+			var lettremanque int
+			MotATrouver := []string{}
+			Ascci := [][]string{}
+			Mot := ""
+			var Pendu []string
+			Lettre := []string{} // pour les lettres deja dites
 			Version := true
+			var Stop bool
+
+			// on teste que le mot soit bon
+			if Mot == "Veuillez relancer le jeux" {
+				fmt.Println("Veuillez relancer le jeux")
+				return
+			}
+
+			Pendu = hangman.Hangmanpose()
 
 			for Version {
 				choix := ""
@@ -47,9 +63,53 @@ func main() {
 
 				switch choix {
 				case "1":
-					hangman.JeuBase()
+
+					cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop = hangman.JeuBase(cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre)
+
+					// Sauvegarde
+					if Stop {
+						boolean := true
+						for boolean {
+							fmt.Println("Voulez vous sauvegarder votre partie : oui / non ")
+							choice := ""
+							fmt.Scan(&choice)
+							switch choice {
+							case "oui":
+								fmt.Println("Votre Partie a été sauvegarder")
+								// sauvegarde du pendu basic
+								boolean = false
+							case "non":
+								fmt.Println("Votre parie n'a pas été sauvegarder")
+								boolean = false
+							default:
+								fmt.Println("Veuillez mettre une réponse correcte svp")
+							}
+						}
+					}
 				case "2":
-					hangman.JeuAscii()
+
+					cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop = hangman.JeuAscii(cpt, lettremanque, Ascci, Mot, Pendu, Lettre)
+
+					// Sauvegarde
+					if Stop {
+						boolean := true
+						for boolean {
+							fmt.Println("Voulez vous sauvegarder votre partie : oui / non ")
+							choice := ""
+							fmt.Scan(&choice)
+							switch choice {
+							case "oui":
+								fmt.Println("Votre Partie a été sauvegarder")
+								// sauvegarde du pendu avec l'Ascii-Art
+								boolean = false
+							case "non":
+								fmt.Println("Votre parie n'a pas été sauvegarder")
+								boolean = false
+							default:
+								fmt.Println("Veuillez mettre une réponse correcte svp")
+							}
+						}
+					}
 				case "3":
 					Version = false
 				default:
