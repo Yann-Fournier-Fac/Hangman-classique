@@ -1,12 +1,13 @@
 package main
 
-// faire un tableau des lettres déjà entrer
-// donner la possibilité au joueur de rentrer un mot
-// faire une bibliothèque de mots
+// régler bug ajout des lettres
+// faire une fonction clear()
 
 import (
 	"fmt"
 	"hangman"
+	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -73,12 +74,17 @@ func main() {
 				var lettre string
 				fmt.Scan(&lettre)
 
+				c := exec.Command("clear")
+				c.Stdout = os.Stdout
+				c.Run()
+
 				// comparer le mot rentrer par le joueur
 				if len(lettre) >= 2 {
 					if len(lettre) == len(Mot) {
 						var cpt2 int // compteur de lettre correspondentes
 						for i := 0; i < len(Mot); i++ {
-							if lettre[i] == Mot[i] {
+							let := strings.ToLower(string(lettre[i]))
+							if let == string(Mot[i]) {
 								cpt2++
 							}
 						}
@@ -143,7 +149,6 @@ func main() {
 					fmt.Println("José est en danger")
 					fmt.Printf("\n")
 				}
-
 			}
 
 			// fin du jeu

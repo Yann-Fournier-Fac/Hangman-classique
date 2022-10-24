@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 )
 
 //"io"
@@ -79,7 +80,10 @@ func main() {
 	for i := 0; i < 10; i++ {
 		hang(i, pose)
 	}
-	
+
+	c := exec.Command("clear")
+	c.Stdout = os.Stdout
+	c.Run()
 
 	// Creation des niveux d'erreurs
 	/*content, err := os.Open("hangman.txt")
