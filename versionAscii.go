@@ -12,7 +12,7 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 	var Stop bool = false
 	var stop string = "stop"
 	// Determiner le mot a deviner le mot à deviner
-	Mot = Findword()
+	/*Mot = Findword()
 	//fmt.Println(Mot)
 
 	// creation des "_" en Ascii
@@ -23,7 +23,7 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 	// affichage des n lettre Ascii
 	n := (len(Mot) / 2) - 1
 	lettremanque = len(Mot) - n
-	Ascci = NLetterAscii(Mot, Ascci)
+	Ascci = NLetterAscii(Mot, Ascci)*/
 
 	// Debut du jeu
 	fmt.Println("Une nouvelle partie a été lancée")
@@ -70,7 +70,7 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 		// comparer le mot rentrer par le joueur
 		if len(lettre) >= 2 {
 			if len(lettre) == 4 {
-				for i := 0; i < len(lettre); i++ {
+				for i := 0; i < 4; i++ {
 					if strings.ToLower(string(lettre[i])) != string(stop[i]) {
 						break
 					} else {

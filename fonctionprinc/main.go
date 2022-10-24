@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"hangman"
 	"io"
+	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	//"reflect"
@@ -30,6 +32,21 @@ func main() {
 
 		switch str {
 		case "1":
+
+			if len(os.Args[:1]) == 1 && os.Args[1] == "Save.txt" {
+				// Lire le fichier txt
+				data, err := ioutil.ReadFile("Save.txt") // lire le fichier
+				if err != nil {
+					fmt.Println(err)
+				}
+
+				unmarshsave := hangman.Unmarshal(data)
+				if len(unmarshsave.Asccii) == 0 {
+					hangman.JeuBase(unmarshsave.Cptt, unmarshsave.Lettremanquante, unmarshsave.MotATrouve, unmarshsave.Mots, unmarshsave.Pend, unmarshsave.Lett)
+				} else {
+					hangman.JeuAscii(unmarshsave.Cptt, unmarshsave.Lettremanquante, unmarshsave.Asccii, unmarshsave.Mots, unmarshsave.Pend, unmarshsave.Lett)
+				}
+			}
 
 			// Initialisation des variables
 			cpt := -1
@@ -65,6 +82,19 @@ func main() {
 
 				switch choix {
 				case "1":
+					// Determiner le mot a deviner le mot à deviner
+					Mot = hangman.Findword()
+					//fmt.Println(Mot)
+
+					// creation des "_" en Ascii
+					for i := 0; i < len(Mot); i++ {
+						MotATrouver = append(MotATrouver, "_ ")
+					}
+
+					// affichage des n lettre Ascii
+					n := (len(Mot) / 2) - 1
+					lettremanque = len(Mot) - n
+					MotATrouver = hangman.NLetterBase(Mot, MotATrouver)
 
 					cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop = hangman.JeuBase(cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre)
 
@@ -77,6 +107,38 @@ func main() {
 							fmt.Scan(&choice)
 							switch choice {
 							case "oui":
+
+								file, err := os.Create("Save.txt")
+
+								if err != nil {
+									log.Fatal(err)
+								}
+								defer file.Close()
+
+								var sauvegarde hangman.Save
+								sauvegarde.Cptt = cpt
+								sauvegarde.Lettremanquante = lettremanque
+								sauvegarde.MotATrouve = MotATrouver
+								sauvegarde.Asccii = [][]string{}
+								sauvegarde.Lett = Lettre
+								sauvegarde.Mots = Mot
+								sauvegarde.Pend = Pendu
+
+								marshaled_data := hangman.Marshal(sauvegarde) // transformation en byte
+
+								read, err := os.OpenFile("Save.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600) //Open fichier; s il existe pas : il est creer
+
+								defer read.Close() // on ferme automatiquement à la fin de notre programme
+
+								if err != nil {
+									panic(err)
+								}
+
+								_, err = file.WriteString(string(marshaled_data))
+								if err != nil {
+									panic(err)
+								}
+
 								fmt.Println("Votre Partie a été sauvegarder")
 								// sauvegarde du pendu basic
 								boolean = false
@@ -90,6 +152,20 @@ func main() {
 					}
 				case "2":
 
+					// Determiner le mot a deviner le mot à deviner
+					Mot = hangman.Findword()
+					//fmt.Println(Mot)
+
+					// creation des "_" en Ascii
+					for i := 0; i < len(Mot); i++ {
+						Ascci = append(Ascci, []string{"             ", "             ", "             ", "             ", " ___________ ", "|___________|", "              "}) // 7 éléments
+					}
+
+					// affichage des n lettre Ascii
+					n := (len(Mot) / 2) - 1
+					lettremanque = len(Mot) - n
+					Ascci = hangman.NLetterAscii(Mot, Ascci)
+
 					cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop = hangman.JeuAscii(cpt, lettremanque, Ascci, Mot, Pendu, Lettre)
 
 					// Sauvegarde
@@ -101,6 +177,36 @@ func main() {
 							fmt.Scan(&choice)
 							switch choice {
 							case "oui":
+								file, err := os.Create("Save.txt")
+
+								if err != nil {
+									log.Fatal(err)
+								}
+								defer file.Close()
+
+								var sauvegarde hangman.Save
+								sauvegarde.Cptt = cpt
+								sauvegarde.Lettremanquante = lettremanque
+								sauvegarde.MotATrouve = []string{}
+								sauvegarde.Asccii = Ascci
+								sauvegarde.Lett = Lettre
+								sauvegarde.Mots = Mot
+								sauvegarde.Pend = Pendu
+
+								marshaled_data := hangman.Marshal(sauvegarde) // transformation en byte
+
+								read, err := os.OpenFile("Save.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600) //Open fichier; s il existe pas : il est creer
+
+								defer read.Close() // on ferme automatiquement à la fin de notre programme
+
+								if err != nil {
+									panic(err)
+								}
+
+								_, err = file.WriteString(string(marshaled_data))
+								if err != nil {
+									panic(err)
+								}
 								fmt.Println("Votre Partie a été sauvegarder")
 								// sauvegarde du pendu avec l'Ascii-Art
 								boolean = false

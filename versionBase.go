@@ -13,7 +13,7 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 	var stop string = "stop"
 
 	// Determiner le mot a deviner le mot à deviner
-	Mot = Findword()
+	/*Mot = Findword()
 	//fmt.Println(Mot)
 
 	// creation des "_" en Ascii
@@ -24,7 +24,7 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 	// affichage des n lettre Ascii
 	n := (len(Mot) / 2) - 1
 	lettremanque = len(Mot) - n
-	MotATrouver = NLetterBase(Mot, MotATrouver)
+	MotATrouver = NLetterBase(Mot, MotATrouver)*/
 
 	// Debut du jeu
 	fmt.Println("Une nouvelle partie a été lancée")
