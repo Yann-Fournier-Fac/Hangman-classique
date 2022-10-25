@@ -16,13 +16,13 @@ type Save struct {
 	Affiche         []string
 }
 
-func Unmarshal(data []byte) Save {
+func Detransformation(data []byte) Save {
 	var emp Save
 	json.Unmarshal(data, &emp)
 	return emp
 }
 
-func Marshal(emp Save) []byte {
+func Transformation(emp Save) []byte {
 	empData, err := json.Marshal(emp)
 	if err != nil {
 		fmt.Println(err)

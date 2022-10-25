@@ -41,7 +41,7 @@ func main() {
 					fmt.Println(err)
 				}
 
-				unmarshsave := hangman.Unmarshal(data)
+				unmarshsave := hangman.Detransformation(data)
 				if len(unmarshsave.Asccii) == 0 {
 					hangman.JeuBase(unmarshsave.Cptt, unmarshsave.Lettremanquante, unmarshsave.MotATrouve, unmarshsave.Mots, unmarshsave.Pend, unmarshsave.Lett, unmarshsave.Affiche, unmarshsave.Asccii)
 				} else {
@@ -125,8 +125,9 @@ func main() {
 									sauvegarde.Lett = Lettre
 									sauvegarde.Mots = Mot
 									sauvegarde.Pend = Pendu
+									sauvegarde.Affiche = Affichage
 
-									marshaled_data := hangman.Marshal(sauvegarde) // transformation en byte
+									marshaled_data := hangman.Transformation(sauvegarde) // transformation en byte
 
 									read, err := os.OpenFile("Save.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600) //Open fichier; s il existe pas : il est creer
 
@@ -213,7 +214,7 @@ func main() {
 									sauvegarde.Pend = Pendu
 									sauvegarde.Affiche = Affichage
 
-									marshaled_data := hangman.Marshal(sauvegarde) // transformation en byte
+									marshaled_data := hangman.Transformation(sauvegarde) // transformation en byte
 
 									read, err := os.OpenFile("Save.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600) //Open fichier; s il existe pas : il est creer
 
