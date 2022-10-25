@@ -48,14 +48,17 @@ func Findword() string {
 
 	// Si aucun fichier txt est placé en paramettre
 	if len(os.Args[1:]) != 1 {
+
 		Dictionnaire = append(Dictionnaire, readfile("words.txt"))
 		Dictionnaire = append(Dictionnaire, readfile("words2.txt"))
 		Dictionnaire = append(Dictionnaire, readfile("words3.txt"))
+
 		for _, txt := range Dictionnaire {
 			for _, i := range txt {
 				words = append(words, i)
 			}
 		}
+		
 		if len(words) != 0 {
 			rand.Seed(time.Now().UnixNano())
 			nbr := rand.Intn(len(words))
@@ -98,5 +101,6 @@ func readfile(name string) []string {
 	if err := scanner.Err(); err != nil {
 		fmt.Println(err)
 	}
+
 	return words
 }

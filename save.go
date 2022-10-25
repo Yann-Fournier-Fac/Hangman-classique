@@ -13,6 +13,7 @@ type Save struct {
 	Mots            string
 	Pend            []string
 	Lett            []string
+	Affiche         []string
 }
 
 func Unmarshal(data []byte) Save {

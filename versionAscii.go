@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []string, Lettre []string) (int, int, [][]string, string, []string, []string, bool) {
+func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []string, Lettre []string, Affich []string, Motatr []string) (int, int, [][]string, string, []string, []string, bool, []string, []string) {
 
 	var Stop bool = false
 	var stop string = "stop"
@@ -54,6 +54,8 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 
 		fmt.Println("Voici les lettres déjà entrée :")
 		fmt.Print(Lettre)
+		fmt.Print(Affich)
+		fmt.Print(lettremanque)
 		fmt.Printf("\n")
 		fmt.Printf("\n")
 
@@ -75,7 +77,7 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 						break
 					} else {
 						Stop = true
-						return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop
+						return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr
 					}
 				}
 			} else if len(lettre) == len(Mot) {
@@ -130,6 +132,14 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 					cpt++
 				}
 
+				cpt5 := 0
+				for i := 0; i < len(Affich); i++ {
+					if Affich[i] == lettre {
+						cpt5++
+					}
+				}
+				lettremanque += cpt5
+
 			} else {
 				fmt.Println(Purple + "Cette lettre à déjà été rentrée" + Reset)
 			}
@@ -164,7 +174,7 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 		Prtword(Ascci)
 		fmt.Printf("\n")
 		fmt.Printf("\n")
-		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop
+		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr
 
 	} else if lettremanque == 0 { // Toutes les lettres ont été trouvée
 
@@ -179,7 +189,7 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 		fmt.Printf("Tu as trouvé le bon mot qui était %v", Mot)
 		fmt.Printf("\n")
 		fmt.Printf("\n")
-		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop
+		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr
 	}
-	return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop
+	return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr
 }
