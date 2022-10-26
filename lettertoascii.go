@@ -89,7 +89,9 @@ func Lettertoascii(s string) []string {
 		str := []string{" ______ ", "|___  / ", "   / /  ", "  / /   ", " / /__  ", "/_____| ", "          "}
 		return str
 	default:
-		fmt.Println("Merci de rentrer un caractère correct !")
+		fmt.Printf("\n")
+		fmt.Println(Red + "Veuillez entrer un caractère correcte svp" + Reset)
+		fmt.Printf("\n")
 	}
 	return tab
 }

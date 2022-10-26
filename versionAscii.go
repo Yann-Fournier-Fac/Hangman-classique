@@ -188,7 +188,7 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 		fmt.Printf("\n")
 		fmt.Printf("\n")
 
-		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr // return 
+		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr // return
 
 	} else if lettremanque == 0 { // Toutes les lettres ont été trouvée
 
