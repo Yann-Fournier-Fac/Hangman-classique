@@ -11,19 +11,6 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 
 	var Stop bool = false
 	var stop string = "stop"
-	// Determiner le mot a deviner le mot à deviner
-	/*Mot = Findword()
-	//fmt.Println(Mot)
-
-	// creation des "_" en Ascii
-	for i := 0; i < len(Mot); i++ {
-		Ascci = append(Ascci, []string{"             ", "             ", "             ", "             ", " ___________ ", "|___________|", "              "}) // 7 éléments
-	}
-
-	// affichage des n lettre Ascii
-	n := (len(Mot) / 2) - 1
-	lettremanque = len(Mot) - n
-	Ascci = NLetterAscii(Mot, Ascci)*/
 
 	// Debut du jeu
 	fmt.Println("Une nouvelle partie a été lancée")
@@ -31,12 +18,10 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 	fmt.Printf("Good luck")
 	fmt.Printf("\n")
 
+	// la boucle continue tansqu'il reste des lettres a trouver ou que le joueur n'a pas fait 10 erreurs
 	for (cpt < 9) && (lettremanque != 0) {
 
-		//fmt.Print(Lettre)
-		//fmt.Printf("\n")
-
-		// Affichage du nombre d'essais restant et du mot en Ascci-art
+		// Affichage du nombre d'essais restant en couleur
 		if cpt >= 7 {
 			fmt.Printf(Red+"You have %v possible errors left\n", 10-(cpt+1))
 			fmt.Println(Reset)
@@ -48,14 +33,16 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 			fmt.Println(Reset)
 		}
 
+		// Affichage du Mot en Ascii
 		fmt.Printf("\n")
 		Prtword(Ascci)
 		fmt.Printf("\n")
 
+		// Affichage des Lettres deja entrer par l'utilisateur
 		fmt.Println("Voici les lettres déjà entrée :")
 		fmt.Print(Lettre)
-		fmt.Print(Affich)
-		fmt.Print(lettremanque)
+		//fmt.Print(Affich)
+		//fmt.Print(lettremanque)
 		fmt.Printf("\n")
 		fmt.Printf("\n")
 
@@ -71,7 +58,11 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 
 		// comparer le mot rentrer par le joueur
 		if len(lettre) >= 2 {
+
+			// comparer le stop (si le joueur veux arreter)
 			if len(lettre) == 4 {
+
+				// comparer le stop
 				for i := 0; i < 4; i++ {
 					if strings.ToLower(string(lettre[i])) != string(stop[i]) {
 						break
@@ -80,7 +71,24 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 						return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr
 					}
 				}
-			} else if len(lettre) == len(Mot) {
+
+				// comparer le mot de longueur 4
+				var cpt2 int // compteur de lettre correspondentes
+				for i := 0; i < 4; i++ {
+					let := strings.ToLower(string(lettre[i]))
+					if let == string(Mot[i]) {
+						cpt2++
+					}
+				}
+				if cpt2 == len(Mot) { // verification du nbr de lettre correspondentes
+					lettremanque = 0
+				} else {
+					cpt += 2
+					fmt.Println(Purple + "Ce n'était pas le bon mot" + Reset)
+
+				}
+
+			} else if len(lettre) == len(Mot) { // Comparer les mots de meme longeur
 				var cpt2 int // compteur de lettre correspondentes
 				for i := 0; i < len(Mot); i++ {
 					let := strings.ToLower(string(lettre[i]))
@@ -92,12 +100,10 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 					lettremanque = 0
 				} else {
 					cpt += 2
-					//hangman.Hang(cpt, Pendu)
 					fmt.Println(Purple + "Ce n'était pas le bon mot" + Reset)
 				}
-			} else if len(lettre) != len(Mot) {
+			} else if len(lettre) != len(Mot) { // Comparer les mots de longeur differentes
 				cpt += 2
-				//hangman.Hang(cpt, Pendu)
 				fmt.Println(Purple + "Ce n'était pas le bon mot" + Reset)
 			}
 
@@ -114,38 +120,42 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 					break
 				}
 			}
+
 			if cpt4 == 0 { // Si elle est nouvelle
 
 				Lettre = append(Lettre, lettre) // ajout à lettre déjà entrer à une liste
 
-				// on transforme la lettre en Ascii
+				// on transforme la lettre en Ascii dans le mot
 				let := 0
 				for i := 0; i < len(Mot); i++ {
-					if lettre == string(Mot[i]) {
-						Ascci[i] = Lettertoascii(lettre)
-						lettremanque--
-						let++
+					if lettre == string(Mot[i]) { // si la lettre corespond
+						Ascci[i] = Lettertoascii(lettre) // transformation ascii
+						lettremanque--                   // decremante lettre manquante
+						let++                            // Si une lettre correspond : ++
 					}
 				}
-				cpt4 = 0
+
+				// Pour savoir si aucune lettre ne correspond et qu'il faut augmenter le cpt d'erreur de un
 				if let == 0 {
 					cpt++
 				}
 
-				cpt5 := 0
+				// On regarde si la lettre était déjà afficher
+				cpt5 := 0 // compter cbm de fois la lettre est afficher
 				for i := 0; i < len(Affich); i++ {
 					if Affich[i] == lettre {
 						cpt5++
 					}
 				}
-				lettremanque += cpt5
+				lettremanque += cpt5 // Puis on ajoute a lettremanque car les lettres afficher
+				//ne sont pas consider comme des lettres manquantes
 
 			} else {
 				fmt.Println(Purple + "Cette lettre à déjà été rentrée" + Reset)
 			}
 		}
 
-		// Afficher le pendu
+		// Afficher le pendu avec des phrase en couleur
 		if cpt == -1 {
 			fmt.Printf(Green + "José se porte bien" + Reset)
 			fmt.Printf("\n")
@@ -166,19 +176,23 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 
 	// fin du jeu
 	if cpt >= 9 { // les 10 essays ont été utilisé
+
 		fmt.Println(Red + "Dommage, vous avez tué José. lance une nouvelle partie pour réessayer" + Reset)
 		fmt.Printf("Le mot à trouver était : %v \n", Mot)
+
+		// Affichage du mot complet en Ascii-Art
 		for i := 0; i < len(Mot); i++ {
 			Ascci[i] = Lettertoascii(string(Mot[i]))
 		}
 		Prtword(Ascci)
 		fmt.Printf("\n")
 		fmt.Printf("\n")
-		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr
+
+		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr // return 
 
 	} else if lettremanque == 0 { // Toutes les lettres ont été trouvée
 
-		// Affichage du Mot en Ascci
+		// Affichage du Mot complet en Ascci-Art
 		for i := 0; i < len(Mot); i++ {
 			Ascci[i] = Lettertoascii(string(Mot[i]))
 		}

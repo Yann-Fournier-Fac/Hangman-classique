@@ -12,32 +12,16 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 	var Stop bool = false
 	var stop string = "stop"
 
-	// Determiner le mot a deviner le mot à deviner
-	/*Mot = Findword()
-	//fmt.Println(Mot)
-
-	// creation des "_" en Ascii
-	for i := 0; i < len(Mot); i++ {
-		MotATrouver = append(MotATrouver, "_ ")
-	}
-
-	// affichage des n lettre Ascii
-	n := (len(Mot) / 2) - 1
-	lettremanque = len(Mot) - n
-	MotATrouver = NLetterBase(Mot, MotATrouver)*/
-
 	// Debut du jeu
 	fmt.Println("Une nouvelle partie a été lancée")
 	fmt.Printf("\n")
 	fmt.Printf("Good luck")
 	fmt.Printf("\n")
 
+	// la boucle continue tansqu'il reste des lettres a trouver ou que le joueur n'a pas fait 10 erreurs
 	for (cpt < 9) && (lettremanque != 0) {
 
-		//fmt.Print(Lettre)
-		//fmt.Printf("\n")
-
-		// Affichage du nombre d'essais restant et du mot en Ascci-art
+		// Affichage du nombre d'essais restant en couleur
 		if cpt >= 7 {
 			fmt.Printf(Red+"You have %v possible errors left\n", 10-(cpt+1))
 			fmt.Println(Reset)
@@ -49,6 +33,7 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 			fmt.Println(Reset)
 		}
 
+		// Affichage du Mot avec les lettres en majuscule
 		fmt.Printf("\n")
 		for i := 0; i < len(MotATrouver); i++ {
 			fmt.Printf(strings.ToUpper(MotATrouver[i]))
@@ -56,10 +41,11 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 		fmt.Printf("\n")
 		fmt.Printf("\n")
 
+		// Affichage des Lettres deja entrer par l'utilisateur
 		fmt.Println("Voici les lettres déjà entrée :")
 		fmt.Print(Lettre)
-		fmt.Print(Affichage)
-		fmt.Print(lettremanque)
+		//fmt.Print(Affichage)
+		//fmt.Print(lettremanque)
 		fmt.Printf("\n")
 		fmt.Printf("\n")
 
@@ -77,7 +63,11 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 
 		// comparer le mot rentrer par le joueur
 		if len(lettre) >= 2 {
+
+			// comparer le stop (si le joueur veux arreter)
 			if len(lettre) == 4 {
+
+				// comparer le stop
 				for i := 0; i < len(lettre); i++ {
 					if strings.ToLower(string(lettre[i])) != string(stop[i]) {
 						break
@@ -86,7 +76,28 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 						return cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop, Affichage, Ascci
 					}
 				}
-			} else if len(lettre) == len(Mot) {
+
+				// comparer le mot de longueur 4
+
+				var cpt2 int // compteur de lettre correspondentes
+
+				for i := 0; i < 4; i++ {
+					let := strings.ToLower(string(lettre[i]))
+					if let == string(Mot[i]) {
+						cpt2++
+					}
+				}
+				if cpt2 == len(Mot) { // verification du nbr de lettre correspondentes
+					lettremanque = 0
+
+				} else {
+					cpt += 2
+					fmt.Println(Purple + "Ce n'était pas le bon mot" + Reset)
+
+				}
+
+			} else if len(lettre) == len(Mot) { // Comparer les mots de meme longeur
+
 				var cpt2 int // compteur de lettre correspondentes
 				for i := 0; i < len(Mot); i++ {
 					let := strings.ToLower(string(lettre[i]))
@@ -98,12 +109,10 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 					lettremanque = 0
 				} else {
 					cpt += 2
-					//hangman.Hang(cpt, Pendu)
 					fmt.Println(Purple + "Ce n'était pas le bon mot" + Reset)
 				}
 			} else if len(lettre) != len(Mot) {
 				cpt += 2
-				//hangman.Hang(cpt, Pendu)
 				fmt.Println(Purple + "Ce n'était pas le bon mot" + Reset)
 			}
 
@@ -126,25 +135,30 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 
 				// on transforme la lettre en Ascii
 				let := 0
+
+				// On ajoute la lettre au Mot a trouver
 				for i := 0; i < len(Mot); i++ {
-					if lettre == string(Mot[i]) {
-						MotATrouver[i] = lettre + " "
-						lettremanque--
-						let++
+					if lettre == string(Mot[i]) { // si la lettre corespond
+						MotATrouver[i] = lettre + " " // Ajout de la lettre au mot a trouver
+						lettremanque--                // decremante lettre manquante
+						let++                         // Si une lettre correspond : ++
 					}
 				}
-				cpt4 = 0
+
+				// Pour savoir si aucune lettre ne correspond et qu'il faut augmenter le cpt d'erreur de un
 				if let == 0 {
 					cpt++
 				}
 
-				cpt5 := 0
+				// On regarde si la lettre était déjà afficher
+				cpt5 := 0 // compter cbm de fois la lettre est afficher
 				for i := 0; i < len(Affichage); i++ {
 					if Affichage[i] == lettre {
 						cpt5++
 					}
 				}
-				lettremanque += cpt5
+				lettremanque += cpt5 // Puis on ajoute a lettremanque car les lettres afficher
+				//ne sont pas consider comme des lettres manquantes
 
 			} else {
 				fmt.Println(Purple + "Cette lettre à déjà été rentrée" + Reset)
@@ -173,10 +187,10 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 	// fin du jeu
 	if cpt >= 9 { // les 10 essays ont été utilisé
 
-		// Affichage du Mot
+		// Affichage du Mot complet en majuscule
 		fmt.Printf("\n")
 		for i := 0; i < len(MotATrouver); i++ {
-			fmt.Printf(strings.ToUpper(string(Mot[i])))
+			fmt.Printf(strings.ToUpper(string(Mot[i])) + " ")
 		}
 		fmt.Printf("\n")
 		fmt.Printf("\n")
@@ -189,10 +203,10 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 
 	} else if lettremanque == 0 { // Toutes les lettres ont été trouvée
 
-		// Affichage du Mot
+		// Affichage du Mot complet en Majuscule
 		fmt.Printf("\n")
 		for i := 0; i < len(MotATrouver); i++ {
-			fmt.Printf(strings.ToUpper(string(Mot[i])))
+			fmt.Printf(strings.ToUpper(string(Mot[i])) + " ")
 		}
 		fmt.Printf("\n")
 		fmt.Printf("\n")

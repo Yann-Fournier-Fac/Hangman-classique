@@ -1,7 +1,6 @@
 package main
 
 // faire la sauvegarde (la pofiner)
-// faire un tableau de lettres afficher
 
 import (
 	"bufio"
@@ -9,7 +8,6 @@ import (
 	"hangman"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 	//"reflect"
@@ -64,21 +62,22 @@ func main() {
 					c.Stdout = os.Stdout
 					c.Run()
 
+					// Initialisation des variables
+					cpt := -1
+					var lettremanque int
+					MotATrouver := []string{}
+					Ascci := [][]string{}
+					Mot := ""
+					var Pendu []string
+					Lettre := []string{} // pour les lettres deja dites
+					var Stop bool
+					var Affichage []string
+					// Determiner le mot a deviner le mot à deviner
+					Mot = hangman.Findword()
+					//fmt.Println(Mot)
+
 					switch choix {
 					case "1":
-						// Initialisation des variables
-						cpt := -1
-						var lettremanque int
-						MotATrouver := []string{}
-						Ascci := [][]string{}
-						Mot := ""
-						var Pendu []string
-						Lettre := []string{} // pour les lettres deja dites
-						var Stop bool
-						var Affichage []string
-						// Determiner le mot a deviner le mot à deviner
-						Mot = hangman.Findword()
-						//fmt.Println(Mot)
 
 						// on teste que le mot soit bon
 						if Mot == "Veuillez relancer le jeux" {
@@ -110,43 +109,13 @@ func main() {
 								switch choice {
 								case "oui":
 
-									file, err := os.Create("Save.txt")
-
-									if err != nil {
-										log.Fatal(err)
-									}
-									defer file.Close()
-
-									var sauvegarde hangman.Save
-									sauvegarde.Cptt = cpt
-									sauvegarde.Lettremanquante = lettremanque
-									sauvegarde.MotATrouve = MotATrouver
-									sauvegarde.Asccii = Ascci
-									sauvegarde.Lett = Lettre
-									sauvegarde.Mots = Mot
-									sauvegarde.Pend = Pendu
-									sauvegarde.Affiche = Affichage
-
-									marshaled_data := hangman.Transformation(sauvegarde) // transformation en byte
-
-									read, err := os.OpenFile("Save.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600) //Open fichier; s il existe pas : il est creer
-
-									defer read.Close() // on ferme automatiquement à la fin de notre programme
-
-									if err != nil {
-										panic(err)
-									}
-
-									_, err = file.WriteString(string(marshaled_data))
-									if err != nil {
-										panic(err)
-									}
+									hangman.Sauvegarder(cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Affichage, MotATrouver)
 
 									fmt.Println("Votre Partie a été sauvegarder")
-									// sauvegarde du pendu basic
+
 									boolean = false
 								case "non":
-									fmt.Println("Votre parie n'a pas été sauvegarder")
+									fmt.Println("Votre partie n'a pas été sauvegarder")
 									boolean = false
 								default:
 									fmt.Println("Veuillez mettre une réponse correcte svp")
@@ -154,20 +123,6 @@ func main() {
 							}
 						}
 					case "2":
-
-						// Initialisation des variables
-						cpt := -1
-						var lettremanque int
-						MotATrouver := []string{}
-						Ascci := [][]string{}
-						Mot := ""
-						var Pendu []string
-						Lettre := []string{} // pour les lettres deja dites
-						var Stop bool
-						var Affichage []string
-						// Determiner le mot a deviner le mot à deviner
-						Mot = hangman.Findword()
-						//fmt.Println(Mot)
 
 						// creation des "_" en Ascii
 						for i := 0; i < len(Mot); i++ {
@@ -197,39 +152,10 @@ func main() {
 								fmt.Scan(&choice)
 								switch choice {
 								case "oui":
-									file, err := os.Create("Save.txt")
+									hangman.Sauvegarder(cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Affichage, MotATrouver)
 
-									if err != nil {
-										log.Fatal(err)
-									}
-									defer file.Close()
-
-									var sauvegarde hangman.Save
-									sauvegarde.Cptt = cpt
-									sauvegarde.Lettremanquante = lettremanque
-									sauvegarde.MotATrouve = MotATrouver
-									sauvegarde.Asccii = Ascci
-									sauvegarde.Lett = Lettre
-									sauvegarde.Mots = Mot
-									sauvegarde.Pend = Pendu
-									sauvegarde.Affiche = Affichage
-
-									marshaled_data := hangman.Transformation(sauvegarde) // transformation en byte
-
-									read, err := os.OpenFile("Save.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600) //Open fichier; s il existe pas : il est creer
-
-									defer read.Close() // on ferme automatiquement à la fin de notre programme
-
-									if err != nil {
-										panic(err)
-									}
-
-									_, err = file.WriteString(string(marshaled_data))
-									if err != nil {
-										panic(err)
-									}
 									fmt.Println("Votre Partie a été sauvegarder")
-									// sauvegarde du pendu avec l'Ascii-Art
+
 									boolean = false
 								case "non":
 									fmt.Println("Votre parie n'a pas été sauvegarder")
