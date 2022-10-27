@@ -20,15 +20,23 @@ func Prtword(tab [][]string) {
 }
 
 // Affichages de N lettres aléatoires pour deviner le Mot au début
-func NLetterAscii(Mot string, ascii [][]string, Affich []string) ([][]string, []string) {
+func NLetter(Mot string, ascii [][]string, Affich []string, MotATrouve []string) ([][]string, []string, []string) {
 
 	n := len(Mot)/2 - 1 // Le nombre de lettre à afficher
 	tab := []int{}      // creation d'un tableau qui contiendra les indices à afficher
 	boolean := false    // pour une boucle
 
+	var Basique bool
+
+	if len(MotATrouve) == 0 {
+		Basique = false
+	} else {
+		Basique = true
+	}
+
 	// On affiche aucune lettre car le mot est trop petit
 	if n == 0 {
-		return ascii, Affich
+		return ascii, Affich, MotATrouve
 	}
 
 	// On recupere n numéros < len(Mot)
@@ -45,48 +53,18 @@ func NLetterAscii(Mot string, ascii [][]string, Affich []string) ([][]string, []
 		boolean = Alldiff(tab) // tous les indices doivent évidemment etre different (pour bien avoir n numeros)
 	}
 
-	// Puis on met les lettres en Ascii-Art et on ajoute les lettres au tableau affiche
+	// Puis on met les lettres dans le bon tableau et on ajoute les lettres au tableau affiche
 	for i := 0; i < len(tab); i++ {
-		ascii[tab[i]] = Lettertoascii(string(Mot[tab[i]]))
-		Affich = append(Affich, string(Mot[tab[i]]))
-	}
-
-	//fmt.Print(tab)
-	return ascii, Affich // enfin on renvoie ce dont on a besoin ...
-}
-
-// Meme chose que NLettrerAscii
-func NLetterBase(Mot string, MotATrouver []string, Affich []string) ([]string, []string) {
-
-	n := len(Mot)/2 - 1 // Le nombre de lettre à afficher
-	tab := []int{}
-	//cpt := []int{} //bug ajout des lettres
-	boolean := false
-
-	// On affiche aucune lettre car le mot est trop petit
-	if n == 0 {
-		return MotATrouver, Affich
-	}
-
-	// On recupere n numéros < len(Mot)
-	// Ce sont les indices des lettres à afficher
-	for !boolean {
-		for i := 0; i < n; i++ {
-			rand.Seed(time.Now().UnixNano())
-			radomInt2 := rand.Intn(len(Mot))
-			tab = append(tab, radomInt2)
+		if Basique {
+			MotATrouve[tab[i]] = string(Mot[tab[i]]) + " "
+		} else {
+			ascii[tab[i]] = Lettertoascii(string(Mot[tab[i]]))
 		}
-		boolean = Alldiff(tab) // tous les indices doivent évidemment etre different
-	}
-
-	// Puis on met les lettres dans le mot a trouver et on ajoute les lettres au tableau affiche
-	for i := 0; i < len(tab); i++ {
-		MotATrouver[tab[i]] = string(Mot[tab[i]]) + " "
 		Affich = append(Affich, string(Mot[tab[i]]))
 	}
 
 	//fmt.Print(tab)
-	return MotATrouver, Affich
+	return ascii, Affich, MotATrouve // enfin on renvoie ce dont on a besoin ...
 }
 
 // retourne true si tous les élément du tableau tab sont différents sinon retourne false

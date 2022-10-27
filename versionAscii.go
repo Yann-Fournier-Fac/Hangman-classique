@@ -1,6 +1,6 @@
 package hangman
 
-import (
+/*import (
 	"fmt"
 	"os"
 	"os/exec"
@@ -206,4 +206,4 @@ func JeuAscii(cpt int, lettremanque int, Ascci [][]string, Mot string, Pendu []s
 		return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr
 	}
 	return cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affich, Motatr
-}
+}*/

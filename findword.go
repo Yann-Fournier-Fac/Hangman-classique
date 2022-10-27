@@ -12,33 +12,6 @@ import (
 
 // compresser le dossier en .zip (pas en .rar (sinon modification de "\n" en "\r" ))
 
-/*func Findword(s []byte) string {
-	mot := ""
-	tab := bytetoword(s)
-	long := len(tab)
-	rand.Seed(time.Now().UnixNano())
-	nbr := rand.Intn(long)
-	mot = tab[nbr]
-	return mot
-}
-
-func bytetoword(tab []byte) []string {
-	tabl := []string{}
-	str := ""
-	if len(tab) == 0 {
-		return tabl
-	}
-	for i := 0; i < len(tab); i++ {
-		if tab[i] != 10 {
-			str += string(rune(tab[i]))
-		} else if tab[i] == 10 {
-			tabl = append(tabl, str)
-			str = ""
-		}
-	}
-	return tabl
-}*/
-
 func Findword() string {
 
 	// Initialisation Variables
@@ -51,9 +24,9 @@ func Findword() string {
 	if len(os.Args[1:]) != 1 {
 
 		//on creer d'abord un dictionnaire ou on recupere chacun des mots de trois fichier.txt
-		Dictionnaire = append(Dictionnaire, readfile("words.txt"))
-		Dictionnaire = append(Dictionnaire, readfile("words2.txt"))
-		Dictionnaire = append(Dictionnaire, readfile("words3.txt"))
+		Dictionnaire = append(Dictionnaire, Readfile("words.txt"))
+		Dictionnaire = append(Dictionnaire, Readfile("words2.txt"))
+		Dictionnaire = append(Dictionnaire, Readfile("words3.txt"))
 
 		// Puis on met tous les mots dans le même tableau words
 		// avec deux boucle par valeur
@@ -78,7 +51,7 @@ func Findword() string {
 
 	} else { // Sinon On prend un mot au hazard dans le fichier que l'utilisateur a entrer en paramatre
 
-		words = readfile(os.Args[1])
+		words = Readfile(os.Args[1])
 
 		if len(words) != 0 {
 
@@ -95,7 +68,7 @@ func Findword() string {
 	}
 }
 
-func readfile(name string) []string { // name : nom d'un fichier.txt
+func Readfile(name string) []string { // name : nom d'un fichier.txt
 
 	words := []string{} // tableau qui contiendra les mots
 

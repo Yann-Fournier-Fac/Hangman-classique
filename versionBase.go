@@ -7,15 +7,24 @@ import (
 	"strings"
 )
 
-func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu []string, Lettre []string, Affichage []string, Ascci [][]string) (int, int, []string, string, []string, []string, bool, []string, [][]string) {
+func Jeu(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu []string, Lettre []string, Affichage []string, Ascci [][]string) (int, int, []string, string, []string, []string, bool, []string, [][]string) {
 
 	var Stop bool = false
 	var stop string = "stop"
+	var Basique bool
+
+	if len(MotATrouver) == 0 {
+		Basique = false
+	} else {
+		Basique = true
+	}
 
 	// Debut du jeu
 	fmt.Println("Une nouvelle partie a été lancée")
 	fmt.Printf("\n")
-	fmt.Printf("Good luck")
+	fmt.Println("Good luck")
+	fmt.Printf("\n")
+	fmt.Println(Red + "ATTENTION : Les lettres affichées peuvent être en double !" + Reset)
 	fmt.Printf("\n")
 
 	// la boucle continue tansqu'il reste des lettres a trouver ou que le joueur n'a pas fait 10 erreurs
@@ -35,8 +44,12 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 
 		// Affichage du Mot avec les lettres en majuscule
 		fmt.Printf("\n")
-		for i := 0; i < len(MotATrouver); i++ {
-			fmt.Printf(strings.ToUpper(MotATrouver[i]))
+		if Basique {
+			for i := 0; i < len(MotATrouver); i++ {
+				fmt.Printf(strings.ToUpper(MotATrouver[i]))
+			}
+		} else {
+			Prtword(Ascci)
 		}
 		fmt.Printf("\n")
 		fmt.Printf("\n")
@@ -133,15 +146,17 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 
 				Lettre = append(Lettre, lettre) // ajout à lettre déjà entrer à notre liste
 
-				// on transforme la lettre en Ascii
 				let := 0
-
 				// On ajoute la lettre au Mot a trouver
 				for i := 0; i < len(Mot); i++ {
 					if lettre == string(Mot[i]) { // si la lettre corespond
-						MotATrouver[i] = lettre + " " // Ajout de la lettre au mot a trouver
-						lettremanque--                // decremante lettre manquante
-						let++                         // Si une lettre correspond : ++
+						if Basique {
+							MotATrouver[i] = lettre + " " // Ajout de la lettre au mot a trouver
+						} else {
+							Ascci[i] = Lettertoascii(lettre) // On transforme la lettre en Ascii-Art
+						}
+						lettremanque-- // decremante lettre manquante
+						let++          // Si une lettre correspond : ++
 					}
 				}
 
@@ -189,8 +204,15 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 
 		// Affichage du Mot complet en majuscule
 		fmt.Printf("\n")
-		for i := 0; i < len(MotATrouver); i++ {
-			fmt.Printf(strings.ToUpper(string(Mot[i])) + " ")
+		if Basique {
+			for i := 0; i < len(MotATrouver); i++ {
+				fmt.Printf(strings.ToUpper(string(Mot[i])) + " ")
+			}
+		} else {
+			for i := 0; i < len(Mot); i++ {
+				Ascci[i] = Lettertoascii(string(Mot[i]))
+			}
+			Prtword(Ascci)
 		}
 		fmt.Printf("\n")
 		fmt.Printf("\n")
@@ -205,8 +227,15 @@ func JeuBase(cpt int, lettremanque int, MotATrouver []string, Mot string, Pendu 
 
 		// Affichage du Mot complet en Majuscule
 		fmt.Printf("\n")
-		for i := 0; i < len(MotATrouver); i++ {
-			fmt.Printf(strings.ToUpper(string(Mot[i])) + " ")
+		if Basique {
+			for i := 0; i < len(MotATrouver); i++ {
+				fmt.Printf(strings.ToUpper(string(Mot[i])) + " ")
+			}
+		} else {
+			for i := 0; i < len(Mot); i++ {
+				Ascci[i] = Lettertoascii(string(Mot[i]))
+			}
+			Prtword(Ascci)
 		}
 		fmt.Printf("\n")
 		fmt.Printf("\n")

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"hangman"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	//"reflect"
@@ -31,20 +30,10 @@ func main() {
 		case "1":
 
 			// lancer la sauvegarde si elle est placé en parametre
-			if len(os.Args) == 2 && os.Args[1] == "Save.txt" {
-				data, err := ioutil.ReadFile("Save.txt") // lire le fichier
-				if err != nil {
-					fmt.Println(err)
-				}
+			if len(os.Args) == 2 && os.Args[1] == "Save.json" {
 
-				unmarshsave := hangman.Detransformation(data) // On recupere L'objet écrit dans le fichier.txt
+				hangman.SaveParam("Save.json")
 
-				// Puis on lance la version qui correspond : Ascii ou Basique
-				if len(unmarshsave.Asccii) == 0 {
-					hangman.JeuBase(unmarshsave.Cptt, unmarshsave.Lettremanquante, unmarshsave.MotATrouve, unmarshsave.Mots, unmarshsave.Pend, unmarshsave.Lett, unmarshsave.Affiche, unmarshsave.Asccii)
-				} else {
-					hangman.JeuAscii(unmarshsave.Cptt, unmarshsave.Lettremanquante, unmarshsave.Asccii, unmarshsave.Mots, unmarshsave.Pend, unmarshsave.Lett, unmarshsave.Affiche, unmarshsave.MotATrouve)
-				}
 			} else {
 
 				Version := true
@@ -64,15 +53,18 @@ func main() {
 					c.Run()
 
 					// Initialisation des variables
-					cpt := -1                 // compteur d'erreurs
-					var lettremanque int      // cpt de lettres manquantes
+					cpt := -1            // compteur d'erreurs
+					var lettremanque int // cpt de lettres manquantes
+
 					MotATrouver := []string{} // Mot a trouver (ce qui va etre afficher et changer)
 					Ascci := [][]string{}     // Mot a trouver en Ascii-Art
-					Mot := ""                 // Mot choisi au hasard à deviner
-					var Pendu []string        // Position du pendu (une ligne <=> une string)
-					Lettre := []string{}      // pour les lettres deja dites
-					var Stop bool             // bouleen qui indique si on doit sauvegarder ou non
-					var Affichage []string    // tableau des n lettres afficher
+
+					Mot := ""              // Mot choisi au hasard à deviner
+					var Pendu []string     // Position du pendu (une ligne <=> une string)
+					Lettre := []string{}   // pour les lettres deja dites
+					var Affichage []string // tableau des n lettres afficher
+
+					var Stop bool // bouleen qui indique si on doit sauvegarder ou non
 
 					// Determiner le mot a deviner le mot à deviner
 					Mot = hangman.Findword()
@@ -83,6 +75,10 @@ func main() {
 						fmt.Println("Veuillez relancer le jeux")
 						return
 					}
+
+					// On recupere les n lettres a afficher
+					n := (len(Mot) / 2) - 1
+					lettremanque = len(Mot) - n // Initialisation de lettremanque
 
 					// On recupere les positions du pendu
 					Pendu = hangman.Hangmanpose()
@@ -96,42 +92,15 @@ func main() {
 						}
 
 						// On recupere les n lettres a afficher
-						n := (len(Mot) / 2) - 1
-						lettremanque = len(Mot) - n // Initialisation de lettremanque
-						MotATrouver, Affichage = hangman.NLetterBase(Mot, MotATrouver, Affichage)
+						Ascci, Affichage, MotATrouver = hangman.NLetter(Mot, Ascci, Affichage, MotATrouver)
 
 						// On lance le jeu avec toutes les variables
 						// Et on les recupere si jamais l'utilisateur veut sauvegarder ca partie
-						cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop, Affichage, Ascci = hangman.JeuBase(cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Affichage, Ascci)
+						cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop, Affichage, Ascci = hangman.Jeu(cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Affichage, Ascci)
 
 						// Sauvegarde
-						if Stop {
-							boolean := true
-							for boolean {
-								// Demande s'il veut sauvegarder
-								fmt.Println("Voulez vous sauvegarder votre partie : oui / non ")
-								choice := ""
-								fmt.Scan(&choice)
+						hangman.Sauveg(Stop, cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Affichage, MotATrouver)
 
-								switch choice {
-								case "oui":
-
-									// fonction sauvegarde
-									hangman.Sauvegarder(cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Affichage, MotATrouver)
-
-									fmt.Println("Votre Partie a été sauvegarder")
-
-									boolean = false
-								case "non":
-									fmt.Println("Votre partie n'a pas été sauvegarder")
-									boolean = false
-								default:
-									fmt.Printf("\n")
-									fmt.Println(hangman.Red + "Veuillez entrer une reponse correcte svp" + hangman.Reset)
-									fmt.Printf("\n")
-								}
-							}
-						}
 					case "2":
 
 						// creation des "_" en Ascii
@@ -139,40 +108,15 @@ func main() {
 							Ascci = append(Ascci, []string{"             ", "             ", "             ", "             ", " ___________ ", "|___________|", "              "}) // 7 éléments
 						}
 
-						// affichage des n lettre Ascii
-						n := (len(Mot) / 2) - 1
-						lettremanque = len(Mot) - n
-						Ascci, Affichage = hangman.NLetterAscii(Mot, Ascci, Affichage)
+						// On recupere les n lettres a afficher
+						Ascci, Affichage, MotATrouver = hangman.NLetter(Mot, Ascci, Affichage, MotATrouver)
 
 						// On lance le jeu
-						cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Stop, Affichage, MotATrouver = hangman.JeuAscii(cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Affichage, MotATrouver)
+						cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Stop, Affichage, Ascci = hangman.Jeu(cpt, lettremanque, MotATrouver, Mot, Pendu, Lettre, Affichage, Ascci)
 
 						// Sauvegarde
-						if Stop {
-							boolean := true
-							for boolean {
-								fmt.Println("Voulez vous sauvegarder votre partie : oui / non ")
-								choice := ""
-								fmt.Scan(&choice)
-								switch choice {
-								case "oui":
+						hangman.Sauveg(Stop, cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Affichage, MotATrouver)
 
-									// fonction sauvegarde
-									hangman.Sauvegarder(cpt, lettremanque, Ascci, Mot, Pendu, Lettre, Affichage, MotATrouver)
-
-									fmt.Println("Votre Partie a été sauvegarder")
-
-									boolean = false
-								case "non":
-									fmt.Println("Votre parie n'a pas été sauvegarder")
-									boolean = false
-								default:
-									fmt.Printf("\n")
-									fmt.Println(hangman.Red + "Veuillez entrer une reponse correcte svp" + hangman.Reset)
-									fmt.Printf("\n")
-								}
-							}
-						}
 					case "3":
 						Version = false
 					default:
@@ -196,19 +140,7 @@ func main() {
 
 					fmt.Println("Vous pouvez dès à présent reprendre votre partie")
 
-					data, err := ioutil.ReadFile("Save.txt") // lire le fichier
-					if err != nil {
-						fmt.Println(err)
-					}
-
-					unmarshsave := hangman.Detransformation(data) // On recupere L'objet écrit dans le fichier.txt
-
-					// Puis on lance la version qui correspond : Ascii ou Basique
-					if len(unmarshsave.Asccii) == 0 {
-						hangman.JeuBase(unmarshsave.Cptt, unmarshsave.Lettremanquante, unmarshsave.MotATrouve, unmarshsave.Mots, unmarshsave.Pend, unmarshsave.Lett, unmarshsave.Affiche, unmarshsave.Asccii)
-					} else {
-						hangman.JeuAscii(unmarshsave.Cptt, unmarshsave.Lettremanquante, unmarshsave.Asccii, unmarshsave.Mots, unmarshsave.Pend, unmarshsave.Lett, unmarshsave.Affiche, unmarshsave.MotATrouve)
-					}
+					hangman.SaveParam("Save.json")
 
 					bouleen = false
 
